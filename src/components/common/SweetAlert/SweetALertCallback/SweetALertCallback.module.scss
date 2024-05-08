@@ -1,0 +1,23 @@
+.modalContent {
+  width: 300px;
+  margin: 0 auto;
+}
+.custom-modal {
+  width: 600px !important;
+  padding: 50px 0 !important;
+}
+.custom-confirm-btn {
+  background-color: var(--yellow-light) !important;
+  border-color: var(--yellow-light) !important;
+  padding: 8px 70px !important;
+  font-size: 16px !important;
+  border-radius: 18px !important;
+}
+
+.custom-cancel-btn {
+  background-color: var(--yellow-light) !important;
+  color: white !important;
+  padding: 8px 70px !important;
+  font-size: 16px !important;
+  border-radius: 18px !important;
+}

@@ -1,0 +1,58 @@
+$report-table-primary: #cccae4;
+
+.tableWrapper {
+  overflow-x: scroll;
+  overflow-y: scroll;
+  height: max-content;
+  max-height: 80vh;
+  margin-top: 40px;
+}
+
+.tableContainer {
+  width: 100%;
+  margin: auto;
+  text-align: center;
+  color: black;
+  font-family: 'BNazanin' !important ;
+  border-right: 1px solid black !important;
+
+  border-collapse: separate;
+  border-spacing: 0;
+
+  width: 100%; /* Make the table take up the full width of its container */
+
+  .fixedheader {
+    position: sticky !important;
+    top: 0;
+    z-index: 1;
+    font-weight: bold;
+    background-color: $report-table-primary;
+
+    th {
+      border: 1px solid black !important;
+      border-right: 0 none !important;
+      min-height: 28px;
+      height: 50px;
+    }
+  }
+
+  td {
+    white-space: normal;
+    word-wrap: break-word;
+    border: 1px solid black !important;
+    border-top: 0 none !important;
+    border-right: 0 none !important;
+    min-height: 28px;
+    height: auto;
+  }
+
+  tr.sum {
+    font-weight: bold;
+    th {
+      font-size: 14px;
+      border: 1px solid black !important;
+      border-top: 0 none !important;
+      border-right: 0 none !important;
+    }
+  }
+}

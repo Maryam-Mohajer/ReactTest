@@ -1,0 +1,295 @@
+.ComponentHolder{
+    width: 310px;
+    height: 423px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    background: #FFFFFF 0% 0% no-repeat padding-box;
+    box-sizing: border-box;
+    border-radius: 40px;
+    position: relative;
+    .StartUpImage{
+        height: 35%;
+        width: 100%;
+        position: relative;
+        img{
+            width: 100%;
+            object-fit: cover;
+            height: 100%;
+            border-radius:40px 40px 0 0 ;
+            position: absolute;
+            top: 0;
+        }
+        .persent{
+            position: absolute;
+            left: 5%;
+            bottom: 0;
+            color: #fff;
+            z-index: 3;
+            margin: 0;
+            padding: 0;
+            width: auto;
+            height: auto;
+            font-size: 1.3rem!important;
+        }
+        .fullChecker{
+            position: absolute;
+            right: 5%;
+            bottom: 8px;
+            z-index: 3;
+            height: 2rem;
+        }
+    }
+    .logoStartUpHolder{
+        height: 65px;
+        width: 65px;
+        border-radius: 50%;
+        border: 5px solid rgb(255, 255, 255);
+        overflow: hidden;
+        right: 40%;
+        position: absolute;
+        top:30%;
+        z-index: 2;
+        img{
+            height: 100%;
+            width: 100%;
+            object-fit: cover;
+            
+        }
+    }
+    .ProgressBar{
+        width: 100%;
+        height: 0.9rem;
+        direction: rtl;
+        border-radius:  0;
+        div{
+            background: linear-gradient(to right,#00A9FF,#0073AE);
+            border-radius:   0.5rem 0 0 0.5rem ;
+        }
+    }
+    a{
+        width: 95%!important;
+        box-sizing: border-box;
+        font-size: 1.3rem;
+        padding: 0 0.5rem;
+        font-family: 'yekanbakhmedium'!important;
+        font-weight: 600;
+        color: #3A405F!important;
+        margin: 0;
+    }
+    p{
+        margin:0.5rem 0!important;
+        width: 95%!important;
+        box-sizing: border-box;
+        padding: 0 0.5rem!important;
+        text-align: left!important;
+        font-family: 'yekanbakhregular'!important;
+        font-size: 0.9rem!important;
+        text-overflow: ellipsis;
+        overflow: hidden;
+        height: 7.3rem;
+
+    }
+    .formalInfoHolder{
+        width: 95%!important;
+        display: flex;
+        flex-direction: row-reverse;
+        justify-content: space-between;
+        height: 3rem;
+        box-sizing: border-box;
+        padding: 0 0.6rem;
+        p{
+            height:95%!important;
+            width: auto!important;
+            margin:0.5rem 0!important;
+            box-sizing: border-box;
+            padding: 0 0.5rem!important;
+            
+        }
+    }
+    .BtnHolder{
+        opacity: 0;
+        visibility: hidden;
+        width: 95%!important;
+        display: flex;
+        justify-content: space-between;
+        height: 3rem;
+        box-sizing: border-box;
+        padding: 0 0.6rem;
+        align-items: center;
+        p{
+            height:95%;
+            width: auto!important;
+            margin:0.5rem 0!important;
+            box-sizing: border-box;
+            padding: 0 0.5rem!important;
+            display: flex;
+            align-items: center;
+        }
+        a{
+            width: 7rem;
+            height: 2rem;
+
+            box-sizing: border-box;
+            padding: 0.1rem 0;
+            border:3px solid #0073AE ;
+            color: #0073AE;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            border-radius: 0.5rem;
+        }
+        transition: all 0.75s ease-in-out;
+    }
+    .divider{
+        width: 85%;
+        display: none;
+    }
+    transition: all 0.25s ease-in-out;
+}
+// .ComponentHolder:hover{
+//     height: 483px!important;
+//     .divider{
+//         display: block;
+//     }
+//     .BtnHolder{
+//         opacity: 1;
+//         visibility: visible;
+//     }
+// }
+@media (max-width:999px) {
+    .ComponentHolder{
+        width: 252px;
+        height: 300px;
+        .StartUpImage{
+            height: 50% !important; ;
+        }
+        .formalInfoHolder{
+            justify-content: center;
+            p{
+                font-size: 1.3rem!important;
+            }
+            .type{
+                display: none;
+            }
+        }
+        a{
+            margin-top:3rem;
+            text-align: center;
+            box-sizing: border-box;
+        }
+        .describe{
+            display: none;
+        }
+        .logoStartUpHolder{
+            top: 37%;
+            right: 37%;
+        }
+        .ProgressBar{
+            
+            margin-bottom:0 ;
+        }
+    }
+}
+.ComponentHolder2{
+    width: 100%;
+    height: 100%;
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    justify-content: space-between;
+    position: relative;
+    background: #FFFFFF;
+    border-radius: 2rem;
+    overflow: hidden;
+    .StartUpImage{
+        height: 100%;
+        width: 30%;
+        position: relative;
+        img{
+            width: 100%;
+            object-fit: cover;
+            height: 100%;
+            // border-radius:40px 40px 0 0 ;
+            position: absolute;
+            top: 0;
+            left: 0;
+        }
+        .persent{
+            display: none;
+        }
+        .fullChecker{
+            position: absolute;
+            right: 5%;
+            bottom: 8px;
+            z-index: 3;
+            height: 2rem;
+            display: none;
+        }
+    }
+    .logoStartUpHolder{
+        height: 65px;
+        width: 65px;
+        border-radius: 50%;
+        border: 5px solid rgb(255, 255, 255);
+        overflow: hidden;
+        left: 24%;
+        position: absolute;
+        top:25%;
+        z-index: 2;
+        img{
+            height: 100%;
+            width: 100%;
+            object-fit: cover;
+            
+        }
+    }
+    .StartupInfo{
+        width: 60%;
+        box-sizing: border-box;
+        padding-right: 2rem;
+        display: flex;
+        flex-direction: column;
+        a{
+            width: 95%!important;
+            box-sizing: border-box;
+            font-size: 0.9rem;
+            padding: 0 0.1rem;
+            font-family: 'yekanbakhmedium'!important;
+            font-weight: 600;
+            color: #3A405F!important;
+            margin: 0;
+        }
+        .joinedPpl{
+            width: 95%!important;
+            box-sizing: border-box;
+            font-size: 0.9rem;
+            padding: 0 0.1rem;
+        }
+        .ProgeresHandler{
+            display: flex;
+            align-items: center;
+            .ProgressBar{
+                width: 80%;
+                height: 0.9rem;
+                direction: rtl;
+                border-radius:  0;
+                margin: 0;
+                margin-right: 0.5rem;
+                div{
+                    background: linear-gradient(to right,#00A9FF,#0073AE);
+                    border-radius: 0.5rem ;
+                }
+            }
+            p{
+                margin: 0;
+                padding: 0;
+            }
+        }
+    }
+}
+@media (max-width:420px) {
+    .logoStartUpHolder{
+        left: 21%!important;
+    }
+}

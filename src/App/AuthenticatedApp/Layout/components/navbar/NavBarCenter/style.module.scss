@@ -1,0 +1,104 @@
+.navbar-center-wrapper {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  align-self: center;
+  position: relative;
+  top: 15px;
+}
+
+.navbar-center-content {
+  display: flex;
+  justify-content: space-around;
+  align-items: center;
+  flex-wrap: wrap;
+  width: 110%;
+  position: relative;
+  top: -25px;
+}
+
+.title {
+  font-weight: 700;
+  font-size: 17px;
+  text-align: center;
+  margin-right: 7px;
+  color:  var(--main-dark);
+}
+
+@media only screen and (max-width: 990px) {
+  .navbar-center-wrapper {
+    top: 0px;
+  }
+}
+
+@media only screen and (max-width: 750px) {
+  .navbar-center-content {
+    width: 105%;
+    top: -20px;
+  }
+  .title {
+    font-size: 15px;
+  }
+  .logo {
+    width: 80px;
+    height: 80px;
+  }
+  .jahad-logo {
+    width: 64px;
+    height: 83px;
+  }
+  .iran-logo {
+    width: 80px;
+    height: 80px;
+  }
+}
+
+@media only screen and (max-width: 680px) {
+  .navbar-center-wrapper {
+    top: -5px;
+  }
+  .navbar-center-content {
+    width: 100%;
+    top: -10px;
+  }
+  .title {
+    font-size: 13px;
+  }
+  .logo {
+    width: 60px;
+    height: 60px;
+  }
+  .jahad-logo {
+    width: 50px;
+    height: 65px;
+  }
+  .iran-logo {
+    width: 60px;
+    height: 60px;
+  }
+}
+
+@media only screen and (max-width: 480px) {
+  .navbar-center-wrapper {
+    top: 0px;
+  }
+  .navbar-center-content {
+    top: -5px;
+  }
+  .title {
+    font-size: 10px;
+  }
+  .logo {
+    width: 50px;
+    height: 50px;
+  }
+  .jahad-logo {
+    width: 45px;
+    height: 60px;
+  }
+  .iran-logo {
+    width: 50px;
+    height: 50px;
+  }
+}

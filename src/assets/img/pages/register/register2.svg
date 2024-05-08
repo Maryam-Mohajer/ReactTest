@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Generator: Adobe Illustrator 25.4.1, SVG Export Plug-In . SVG Version: 6.00 Build 0)  -->
+<svg version="1.1" id="Layer_1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" x="0px" y="0px"
+	 viewBox="0 0 1440 1084" style="enable-background:new 0 0 1440 1084;" xml:space="preserve">
+<style type="text/css">
+	.st0{opacity:0;}
+	.st1{fill-rule:evenodd;clip-rule:evenodd;fill:#FFFFFF;}
+	.st2{filter:url(#Adobe_OpacityMaskFilter);}
+	.st3{mask:url(#b_00000181803691816118480490000002771312743692951461_);}
+	.st4{fill-rule:evenodd;clip-rule:evenodd;fill:#2F90E5;}
+	.st5{fill-rule:evenodd;clip-rule:evenodd;fill:#F9FBFD;fill-opacity:0.25;}
+</style>
+<g>
+	<g class="st0">
+		<path id="a_00000152981172280161853110000011394750221283391407_" class="st1" d="M0,0h1440v1084H0V0z"/>
+	</g>
+	<defs>
+		<filter id="Adobe_OpacityMaskFilter" filterUnits="userSpaceOnUse" x="-468.5" y="-184.9" width="2339" height="1112">
+			<feColorMatrix  type="matrix" values="1 0 0 0 0  0 1 0 0 0  0 0 1 0 0  0 0 0 1 0"/>
+		</filter>
+	</defs>
+	
+		<mask maskUnits="userSpaceOnUse" x="-468.5" y="-184.9" width="2339" height="1112" id="b_00000181803691816118480490000002771312743692951461_">
+		<g class="st2">
+			<path id="a_00000054241843946570925980000009544661917613023930_" class="st1" d="M0.5-184.9h1440v1084H0.5V-184.9z"/>
+		</g>
+	</mask>
+	<g class="st3">
+		<path class="st4" d="M-93.5,343.6c103.9,28.3,220.4,42.5,349.4,42.5c193.5,0,231.1-93.8,424.6-93.8s255.8,93.8,449.3,93.8
+			c129,0,237.2-14.2,324.7-42.5v-502.5h-1548V343.6z"/>
+		<path class="st5" d="M-49.5,344.6c103.9-28.3,220.4-42.5,349.4-42.5c193.5,0,231.1,93.8,424.6,93.8s287-119.8,480.5-119.8
+			c129,0,226.8,22.8,293.5,68.5v582.5h-1548V344.6z"/>
+		<path class="st5" d="M-468.5,254.6c131.8-28.3,279.5-42.5,443-42.5c245.4,0,293.1,93.8,538.5,93.8s324.4-93.8,569.8-93.8
+			c163.6,0,300.8,14.2,411.7,42.5v642.5l-1963-10V254.6z"/>
+		<path class="st5" d="M-13.5,278.6c126.5-28.3,268.2-42.5,425.2-42.5c235.5,0,281.3,93.8,516.8,93.8s311.4-93.8,546.9-93.8
+			c157,0,288.7,14.2,395.1,42.5v622.5h-1884V278.6z"/>
+		<path class="st4" d="M0.5-184.9h1440v72.9H0.5V-184.9z"/>
+	</g>
+</g>
+</svg>

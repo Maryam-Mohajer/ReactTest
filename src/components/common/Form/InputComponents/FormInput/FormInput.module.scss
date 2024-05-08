@@ -1,0 +1,87 @@
+$fieldBackground: transparent;
+
+.fieldHolder {
+  margin-bottom: 25px;
+  position: relative;
+  .label {
+    // font-size: 20px;
+    position: absolute;
+    transform: translateY(60%);
+    left: 10px;
+    width: fit-content;
+    pointer-events: none;
+    transition: 0.3s;
+    background-color: white;
+    padding: 0 5px;
+  }
+  .activeLabel {
+    // font-size: 20px;
+    position: absolute;
+    top: 0;
+    transform: translateY(-34%);
+    left: 10px;
+    width: fit-content;
+    pointer-events: none;
+    transition: 0.3s;
+    background-color: white;
+    padding: 0 5px;
+  }
+  .fieldContainer.fieldWhite {
+    background: white;
+
+    .field {
+      flex: 1;
+      border: none;
+      outline: none;
+      text-indent: 10px;
+      background-color: transparent;
+      display: block;
+    }
+  }
+  .fieldContainer {
+    margin: 5px 0;
+    box-sizing: border-box;
+    border-radius: 3px;
+    border: 1px solid #7d7d7d;
+    display: flex;
+    justify-content: start;
+    align-items: center;
+    background-color: transparent;
+
+    .fieldIcon {
+      width: 20px;
+      height: 20px;
+      margin: 5px;
+      margin-right: 0;
+    }
+    .field {
+      flex: 1;
+      border: none;
+      outline: none;
+      text-indent: 10px;
+      background-color: transparent;
+      height: 35px;
+      display: block;
+    }
+  }
+  .warning {
+    color: rgb(247, 64, 64);
+  }
+}
+
+// @media only screen and (max-width: 992px) {
+//   .fieldHolder {
+//     .label {
+//       color: #d9f5f2;
+//     }
+//     .fieldContainer {
+//       .field {
+//         color: #d9f5f2;
+
+//         &::placeholder {
+//           color: #d9f5f2;
+//         }
+//       }
+//     }
+//   }
+// }

@@ -1,0 +1,103 @@
+@import "../node_modules/prismjs/themes/prism-tomorrow";
+@import "./assets/scss/app.scss";
+@import "./timeline.scss";
+
+:root {
+  --blueDark: #082454;
+  --primary-main: #7367f0;
+  --primary-light: #b4b0f2;
+  --white-main: #fff;
+  --yellow-profile: #c5a110;
+  --yellow-main: #f19c25;
+  --yellow-light: #d29f58;
+  --green-main: #066e49;
+  --green-light: #64b096;
+  --green-light-2: #83a69a;
+  --green-shadow: #718d83;
+  --main-dark: #2c2c2c;
+  --second-dark: #3d3b3b;
+}
+
+body {
+  font-family: ir-sans-r, ir-sans-m !important;
+  // background-color: white !important;
+  width: 100vw;
+  overflow-x: hidden;
+}
+* {
+  font-family: ir-sans-r, ir-sans-m !important;
+}
+.test55 > * {
+  z-index: 1000;
+  background-color: rgb(204, 184, 68);
+}
+
+.disabled-pagination-btn li.disabled a {
+  background-color: #d4d4d4;
+  cursor: not-allowed;
+}
+
+// @media only screen and (max-width: 800px) {
+//   .goog-te-gadget {
+//     position: absolute;
+//     top: 90px;
+//     right : 10px;
+//     padding: 0px 10px;
+//     z-index: 999;
+//   }
+
+// }
+
+.resizer {
+  display: inline-block;
+  background: #c2beee;
+  width: 8px;
+  height: 7px;
+  position: absolute;
+  right: 0;
+  visibility: hidden;
+  opacity: 0;
+  top: 0;
+  transform: translateX(50%);
+  z-index: 1;
+  border-radius: 0 0 7px 7px;
+  touch-action: none;
+
+  &.isResizing {
+    background-color: var(--green-main);
+  }
+}
+.table-header:hover .resizer {
+  transition: 0.5s;
+  visibility: visible;
+  background-color: var(--yellow-light);
+  opacity: 1;
+}
+
+.ant-menu-submenu-vertical .ant-menu-submenu-title svg {
+  margin-right: 40px;
+}
+.ant-menu-submenu-title svg {
+  margin-right: 10px;
+}
+
+.show-image-body > div {
+  margin: 0 auto;
+}
+.show-image-body div {
+  width: 100% !important;
+}
+
+.container-fluid {
+  padding: 0 !important;
+  max-width: 1600px;
+}
+
+ul {
+  list-style-type: none;
+}
+
+.App-map {
+  height: 100%;
+  width: 100%;
+}

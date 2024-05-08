@@ -1,0 +1,25 @@
+.cover_menu {
+  position: absolute;
+  top: 32px;
+  left: 0;
+  z-index: 100;
+  width: 100%;
+  min-height: 400px;
+  background: #f8f8f8;
+  border-radius: 0 0 7px 7px;
+  font-size: 15px;
+
+  .right_part {
+    flex: 0.3;
+    border-right: solid 1px #f0f0f1;
+
+    .active_link {
+      background: #eaeaec;
+      color: #f01e1e;
+    }
+  }
+
+  .left_part {
+    flex: 1;
+  }
+}

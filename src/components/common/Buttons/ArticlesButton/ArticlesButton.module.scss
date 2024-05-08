@@ -1,0 +1,17 @@
+.btn {
+  width: fit-content;
+  border-radius: 15px;
+  cursor: pointer;
+  text-align: center;
+  padding: 8px 45px;
+  font-size: 25px;
+  margin: 50px auto;
+  background: linear-gradient(to left, #0073ae, #00a9ff);
+  @media screen and (max-width: 1000px) {
+    display: none;
+  }
+  .link {
+    font-family: "yekanbakhregular" !important;
+    color: white !important;
+  }
+}

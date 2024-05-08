@@ -1,0 +1,43 @@
+.btn {
+  cursor: pointer;
+  // margin-top: 20px;
+  padding: 10px 32px;
+  // background: linear-gradient(300deg, #4e54c8, #8f94fb);
+  background-color: rgb(111, 109, 220);
+  border-radius: 10px;
+  color: #21161e;
+  box-sizing: border-box;
+  // min-width: 220px;
+  // max-width: 220px;
+  border: 2px solid transparent;
+  position: relative;
+  vertical-align: middle;
+  font-weight: 600;
+  // &:hover {
+  //   border: 2px solid rgb(65, 64, 64);
+  // }
+}
+.outline {
+  cursor: pointer;
+  // margin-top: 20px;
+  padding: 15px 32px;
+  border: 2px solid #5c1449;
+  border-radius: 10px;
+  color: #5c1449;
+  box-sizing: border-box;
+  background: transparent;
+  position: relative;
+  font-weight: 600;
+  min-width: 220px;
+  max-width: 220px;
+
+  // &:hover {
+  //   border: 2px solid #36b2f0;
+  // }
+}
+
+.spinner {
+  margin-left: 10px;
+  position: absolute;
+  top: 18px;
+}

@@ -1,0 +1,127 @@
+.ComponentHolder{
+    width: 240px;
+    height:250px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    background: #FFFFFF 0% 0% no-repeat padding-box;
+    border-radius: 2rem;
+    overflow: hidden;
+    img{
+        width: 100%!important;
+        height: 45%;
+        object-fit: cover;
+    }
+    a{
+        width: 100%;
+        h3{
+            width: 100%;
+            text-align: left;
+            box-sizing: border-box;
+            padding: 0.5rem 1rem;
+            font-family: 'yekanbakhbold'!important;
+            margin: 0;
+        }
+    }
+    .priceHolder{
+        width: 100%;
+        display: flex;
+        flex-direction: row-reverse;
+        font-family: 'yekanbakhmedium'!important;
+        align-items: center;
+        color:  #505050;
+        font-size: 1.3rem;
+        box-sizing: border-box;
+        padding: 0.5rem 1rem;
+        span{
+            color: #00C48E;
+        }
+    }
+    .CourseTH{
+        width: 100%;
+        box-sizing: border-box;
+        padding: 0.5rem 1rem;
+        display: flex;
+        flex-direction: row-reverse;
+        align-items: center;
+        justify-content: space-between;
+        font-size: 0.9rem!important;
+        color:  #9A9A9A;;
+        p{
+            margin: 0;
+        }
+    }
+    hr{
+        width: 80%;
+        margin: 0.2rem;
+        display: none;
+    }
+    .BtnHolder{
+        width: 100%;
+        box-sizing: border-box;
+        padding: 0.5rem 1rem;
+        display: flex;
+        flex-direction: row-reverse;
+        align-items: center;
+        justify-content: space-between;
+        font-size: 0.9rem!important;
+        color:  #9A9A9A;;
+        p{
+            margin: 0;
+            color: #00A9FF;
+            display: flex;
+            align-items: center;
+            span{
+                margin-top: 0.3rem;
+            }
+        }
+        opacity: 0;
+        visibility: hidden;
+        transition: 0.5s;
+    }
+    transition: 0.5s;
+}
+// .ComponentHolder:hover{
+//     transition: 0.5s;
+//     height: 340px!important;
+//     hr{
+//         display: block;
+//     }
+//     .BtnHolder{
+//         opacity: 1;
+//         visibility: visible;
+//         transition: 0.5s;
+//         a{
+//             width: 7rem;
+//             height: 2rem;
+//             box-sizing: border-box;
+//             padding: 0.1rem 0;
+//             border:3px solid #0073AE ;
+//             color: #0073AE;
+//             display: flex;
+//             justify-content: center;
+//             align-items: center;
+//             border-radius: 0.5rem;
+//         }
+//     }
+    
+// }
+@media (max-width:999px) {
+    .ComponentHolder{
+        width: 200px;
+        a{
+            h3{
+                text-align: center;
+            }
+        }
+        .priceHolder{
+            justify-content: center;
+        }
+        .CourseTH{
+            p:last-child{
+                display: none;
+            }
+            justify-content: center;
+        }
+    }
+}

@@ -1,0 +1,89 @@
+.menu {
+  height: 100%;
+  background-color: transparent;
+  border: none;
+  overflow-y: auto;
+  overflow-x: hidden;
+  z-index: 2000;
+}
+.menu::-webkit-scrollbar {
+  width: 5px;
+  padding: 0 2px;
+  background-color: rgba(183, 202, 184, 0.808);
+}
+.menu::-webkit-scrollbar-thumb {
+  width: 4px;
+  border-radius: 5px;
+  background-color: #32cf796c;
+}
+.menu-header {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding: 47px 15px;
+}
+.userInfo-wrapper {
+  display: flex;
+  justify-content: space-around;
+  align-items: center;
+  text-align: center;
+  cursor: pointer;
+}
+
+.userImg-wrapper {
+  border: 3px solid #c5a110;
+  border-radius: 50%;
+  padding: 0 !important;
+  margin: 0 !important;
+}
+
+.userInfo {
+  display: flex;
+  flex-direction: column;
+}
+.userInfo p {
+  margin: 0;
+}
+.user-type {
+  width: 90%;
+  background: linear-gradient(4.21deg, #dadada 3%, #b7b7b7 91.5%);
+  box-shadow: '0 4px 10px #00000026';
+  font-weight: 500;
+  color: white;
+  padding: 18px 0;
+  text-align: center;
+  border-radius: 20px;
+  margin-top: 15px;
+}
+
+.manu-logo {
+  height: 50px;
+  width: 55px;
+  background: url("../../../../../assets/img/logo/logo-copy.png") no-repeat 50%
+    50%;
+  background-size: 100% 100%;
+}
+.brand-text {
+  color: #28c76f;
+  line-height: 50px;
+  margin: 0 3px 0 5px;
+}
+.manu-collaps-icon {
+  color: #28c76f;
+  cursor: pointer;
+}
+.manu-close-icon {
+  display: none;
+}
+.manu-collaps-icon:hover {
+  text-shadow: #28c76f;
+}
+
+@media only screen and (max-width: 1200px) {
+  .manu-collaps-icon {
+    display: none;
+  }
+  .manu-close-icon {
+    display: block;
+  }
+}

@@ -1,0 +1,60 @@
+.menu_style {
+  position: absolute;
+  right: -171px;
+  top: 3px;
+  width: 170px;
+  background: #fff;
+  border-radius: 3px;
+}
+.menu_style::before {
+  content: "";
+  position: absolute;
+  top: 10px;
+  left: 0;
+  width: 0.75rem;
+  height: 0.75rem;
+  display: block;
+  z-index: 10;
+  box-sizing: border-box;
+  background: #fff;
+  border-top: 1px solid;
+  transform: rotate(-131deg) translate(7px);
+  border-right: 1px solid rgba(0, 0, 0, 0.1);
+}
+
+.left_icon {
+  position: relative;
+  top: 3px;
+  left: 4px;
+  padding: 0 5px;
+}
+
+.internal_menu {
+  display: none;
+}
+.main_menu:hover .internal_menu {
+  display: block;
+}
+
+.intenal_menu_2 {
+  display: none;
+}
+
+.first_internall_menu:hover .intenal_menu_2 {
+  display: block;
+}
+
+.intenal_menu_3 {
+  display: none;
+}
+
+.second_internall_menu:hover .intenal_menu_3 {
+  display: block;
+}
+
+.intenal_menu_4 {
+  display: none;
+}
+.third_internall_menu:hover .intenal_menu_4 {
+  display: block;
+}

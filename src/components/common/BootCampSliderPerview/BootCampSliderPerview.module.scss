@@ -1,0 +1,75 @@
+.ComponentHolder{
+    width: 100%;
+    height: 350px;
+    overflow: hidden;
+    // border: 1px solid orange;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: 2rem;
+    overflow: hidden;
+    .InfoHolder{
+        width: 100%;
+        height: 100%;
+        position: relative;
+        img{
+            position: absolute;
+            height: 100%;
+            width: 100%;
+            object-fit: cover;
+            z-index: 1;
+        }
+        .TextInfo{
+            width: 100%;
+            height: 40%;
+            background: rgba(0, 0, 0, 0.788);
+            z-index: 2;
+            position: absolute;
+            bottom: 0;
+            box-sizing: border-box;
+            padding: 1rem 2rem;
+            display: flex;
+            flex-direction: column;
+            align-items: flex-end;
+            justify-content: space-between;
+            h3{
+                color: #fff;
+                margin-bottom: 1.5rem;
+            }
+            p{
+                color:rgb(180, 180, 180);
+            }
+            .describeBootcamp{
+                display: inline-block;
+                white-space: nowrap;
+                text-overflow: ellipsis;
+            }
+
+            .details{
+                // margin-top: 1.5rem;
+                width: 60%;
+                display: flex;
+                flex-direction: row-reverse;
+                justify-content: space-between;
+                p{
+                    display: flex;
+                    align-items: center;
+                    flex-direction: row-reverse;
+                }
+            }
+        }
+    }
+
+}
+@media (max-width:999px) {
+    .ComponentHolder{
+        height: 250px!important;
+        border-radius: 0!important;
+        .TextInfo{
+            height: 52%!important;
+        }
+        .details{
+            width: 100%!important;
+        }
+    }
+}

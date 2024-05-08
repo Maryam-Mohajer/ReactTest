@@ -1,0 +1,23 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="476" height="420" viewBox="0 0 476 420">
+    <defs>
+        <linearGradient id="o9lg1xi40c" x1=".044" x2=".982" y1=".219" y2="1.05" gradientUnits="objectBoundingBox">
+            <stop offset="0" stop-color="#00ffc6"/>
+            <stop offset="1" stop-color="#0078ff"/>
+        </linearGradient>
+        <clipPath id="28gwe176fa">
+            <path fill="#fff" stroke="#707070" d="M0 0H476V420H0z" transform="translate(55 51)"/>
+        </clipPath>
+        <filter id="utm70ewctb" width="717" height="581" x="-174.165" y="-109" filterUnits="userSpaceOnUse">
+            <feOffset dy="11"/>
+            <feGaussianBlur result="blur" stdDeviation="40"/>
+            <feFlood flood-color="#6fc9fc" flood-opacity=".702"/>
+            <feComposite in2="blur" operator="in"/>
+            <feComposite in="SourceGraphic"/>
+        </filter>
+    </defs>
+    <g clip-path="url(#28gwe176fa)" transform="translate(-55 -51)">
+        <g filter="url(#utm70ewctb)" transform="matrix(1, 0, 0, 1, 55, 51)">
+            <path fill="url(#o9lg1xi40c)" d="M0 137.292s20.153 98.251 105.313 150.3 157.281 61.061 234.68 48.15C418 322.732 470.189 283.96 476.51 225.131c5.917-55.072-40.955-152.255-185.924-119.071S0 0 0 0z" transform="translate(-54.16)"/>
+        </g>
+    </g>
+</svg>
