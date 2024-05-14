@@ -1,0 +1,16 @@
+.topBtnStyle {
+  color: white;
+  border: none;
+  padding: 10px 10px;
+  border-radius: 50%;
+  background-color: #49b9a6;
+}
+.buttonContainer {
+  position: fixed;
+  bottom: 20px;
+  left: 24px;
+}
+.buttonContainer:hover {
+  background-color: #55c09e;
+  border-radius: 50%;
+}

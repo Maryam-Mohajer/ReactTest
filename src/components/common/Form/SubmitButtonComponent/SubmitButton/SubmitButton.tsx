@@ -1,9 +1,9 @@
-import React, { ButtonHTMLAttributes, useState } from "react";
-import { Link, useHistory } from "react-router-dom";
-import { Button, Col, Row, Spinner } from "reactstrap";
-import Swal from "sweetalert2";
-import { showToast } from "../../../../../core/utils";
-import Styles from "./SubmitButton.module.scss";
+import React, { ButtonHTMLAttributes, useState } from 'react';
+import { Link, useHistory } from 'react-router-dom';
+import { Button, Col, Row, Spinner } from 'reactstrap';
+import Swal from 'sweetalert2';
+import { showToast } from '../../../../../core/utils';
+import Styles from './SubmitButton.module.scss';
 
 interface IPropTypes {
   isLoading: boolean;
@@ -26,7 +26,7 @@ interface IPropTypes {
   onClick?: () => void;
   clearableDisable?: boolean;
   isClearableLoading?: boolean;
-  type?: "submit" | "reset" | "button";
+  type?: 'submit' | 'reset' | 'button';
 }
 
 const SubmitButton: React.FC<IPropTypes> = ({
@@ -63,8 +63,8 @@ const SubmitButton: React.FC<IPropTypes> = ({
           setBlock(true);
         })
         .catch((val: any) => {
-          showToast(["لطفا اطلاعات را درست وارد کنید"], "error");
-          console.log("---valll error- --", val);
+          showToast(['لطفا اطلاعات را درست وارد کنید'], 'error');
+          console.log('---valll error- --', val);
         });
     }
   };
@@ -75,22 +75,22 @@ const SubmitButton: React.FC<IPropTypes> = ({
     } else {
       const swalWithBootstrapButtons = Swal.mixin({
         customClass: {
-          confirmButton: "btn btn-success mr-1",
-          cancelButton: "btn btn-danger",
+          confirmButton: 'btn btn-success mr-1',
+          cancelButton: 'btn btn-danger',
         },
         buttonsStyling: false,
       });
 
       swalWithBootstrapButtons
         .fire({
-          title: "‌اخطار",
-          text: "تغییرات اعمال شده ذخیره نگردد؟",
-          icon: "warning",
+          title: '‌اخطار',
+          text: 'تغییرات اعمال شده ذخیره نگردد؟',
+          icon: 'warning',
           showCancelButton: true,
-          confirmButtonColor: "#3085d6",
-          cancelButtonColor: "#d33",
-          confirmButtonText: "بله",
-          cancelButtonText: "خیر",
+          confirmButtonColor: '#3085d6',
+          cancelButtonColor: '#d33',
+          confirmButtonText: 'بله',
+          cancelButtonText: 'خیر',
           showLoaderOnConfirm: true,
         })
         .then((result) => {
@@ -102,68 +102,61 @@ const SubmitButton: React.FC<IPropTypes> = ({
   };
 
   return (
-    <Row className={`${Styles.holder} ${clearable && Styles["form-style"]}`}>
+    <Row className={`${Styles.holder} ${clearable && Styles['form-style']}`}>
       {!noSubmit && !clearable && (
-        <Col
-          sm="6"
-          className={`justify-content-start d-flex ${Styles["mobile-mode"]}`}
-        >
+        <Col sm="6" className={`justify-content-start d-flex ${Styles['mobile-mode']}`}>
           <Button
-            color={color ? color : "primary"}
-            className={`d-flex align-items-center justify-content-center ${
-              Styles.submit
-            } ${isDisabled ? Styles.pointer : null}`}
+            color={color}
+            style={{ backgroundColor: '#49b9a6', color: 'white' }}
+            className={`d-flex align-items-center justify-content-center ${Styles.submit} ${
+              isDisabled ? Styles.pointer : null
+            }`}
             onClick={() => {
               if (onClick) onClick();
               checkError(values);
             }}
-            type={type ? type : isLoading ? "button" : "submit"}
+            type={type ? type : isLoading ? 'button' : 'submit'}
             outline={submitOutLine}
             disabled={isDisabled}
           >
-            {isLoading && (
-              <Spinner color={submitOutLine ? "primary" : "white"} size="sm" />
-            )}
-            <span className="ml-50">{btnText ? btnText : "ذخیره اطلاعات"}</span>
+            {isLoading && <Spinner color={submitOutLine ? 'primary' : 'white'} size="sm" />}
+            <span className="ml-50">{btnText ? btnText : 'ذخیره اطلاعات'}</span>
           </Button>
         </Col>
       )}
       {!noSubmit && clearable && (
-        <div
-          className={`justify-content-start d-flex ${Styles["mobile-mode"]}`}
-        >
+        <div className={`justify-content-start d-flex ${Styles['mobile-mode']}`}>
           <Button
-            color={color ? color : "primary"}
-            className={`d-flex align-items-center justify-content-center ${
-              Styles.submit
-            } ${isDisabled ? Styles.pointer : null}`}
+            color={color ? color : 'primary'}
+            style={{ backgroundColor: '#49b9a6' }}
+            className={`d-flex align-items-center justify-content-center ${Styles.submit} ${
+              isDisabled ? Styles.pointer : null
+            }`}
             onClick={() => {
               if (onClick) onClick();
               checkError(values);
             }}
-            type={type ? type : isLoading ? "button" : "submit"}
+            type={type ? type : isLoading ? 'button' : 'submit'}
             outline={submitOutLine}
             disabled={isDisabled}
           >
             {isLoading && <Spinner color="white" size="sm" />}
-            <span className="ml-50">{btnText ? btnText : "ذخیره اطلاعات"}</span>
+            <span className="ml-50">{btnText ? btnText : 'ذخیره اطلاعات'}</span>
           </Button>
 
           {clearable && (
             <Button
               onClick={onClear}
-              className={`d-flex align-items-center justify-content-center ${
-                Styles["remove-btn"]
-              } ${clearableDisable ? Styles.pointer : null}`}
+              className={`d-flex align-items-center justify-content-center ${Styles['remove-btn']} ${
+                clearableDisable ? Styles.pointer : null
+              }`}
               color="primary"
               outline
-              type={"button"}
+              type={'button'}
               disabled={clearableDisable ? true : false}
             >
               {isClearableLoading && <Spinner color="primary" size="sm" />}
-              <span className="ml-50">
-                {clearableTxt ? clearableTxt : "پاک کردن"}
-              </span>
+              <span className="ml-50">{clearableTxt ? clearableTxt : 'پاک کردن'}</span>
             </Button>
           )}
         </div>
@@ -171,32 +164,23 @@ const SubmitButton: React.FC<IPropTypes> = ({
       {(nextTo || backTo) && (
         <Col
           sm="6"
-          className={`${
-            !nextTo && noSubmit
-              ? "justify-content-start"
-              : "justify-content-end"
-          } d-flex ${Styles["mobile-mode"]}`}
+          className={`${!nextTo && noSubmit ? 'justify-content-start' : 'justify-content-end'} d-flex ${
+            Styles['mobile-mode']
+          }`}
         >
           {backTo && (
             <Link
               to="#"
               onClick={() => togglePage(backTo)}
               color="primary"
-              className={`btn btn-outline-primary ${
-                nextTo ? Styles["back-page"] : ""
-              }`}
+              className={`btn btn-outline-primary ${nextTo ? Styles['back-page'] : ''}`}
             >
-              {backToTxt ? backToTxt : "قبلی"}
+              {backToTxt ? backToTxt : 'قبلی'}
             </Link>
           )}
           {nextTo && (
-            <Link
-              onClick={() => togglePage(nextTo)}
-              to="#"
-              color="primary"
-              className="btn btn-outline-primary"
-            >
-              {nextToTxt ? nextToTxt : "بعدی"}
+            <Link onClick={() => togglePage(nextTo)} to="#" color="primary" className="btn btn-outline-primary">
+              {nextToTxt ? nextToTxt : 'بعدی'}
             </Link>
           )}
         </Col>

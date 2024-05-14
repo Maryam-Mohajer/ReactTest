@@ -11,7 +11,9 @@
 .pointer {
   cursor: not-allowed !important;
 }
-
+.btnLightGreen {
+  background-color: #49b9a6;
+}
 @media only screen and (max-width: 600px) {
   .holder {
     display: flex;

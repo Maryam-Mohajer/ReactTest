@@ -1,18 +1,18 @@
-import React, { useState, useEffect } from "react";
-import { Menu } from "antd";
+import React, { useState, useEffect } from 'react';
+import { Menu } from 'antd';
 
-import "antd/lib/menu/style/css";
-import { useLocation } from "react-router-dom";
-import { Link } from "react-router-dom";
-import { NavigationConfig } from "./../../../../../configs/NavConfig";
-import { Grid, X } from "react-feather";
-import Styled from "./SideBar.module.scss";
-import { NavLink } from "react-router-dom";
-import { navigationDetail } from "./../../../../../configs/NavConfig";
-import { useUserAuth } from "../../../../../core/utils/context/AuthenticationContext";
-import Avatar from "components/common/@vuexy/avatar/AvatarComponent";
-import { User } from "react-feather";
-import { UserTypeEnum, UserTypeEnumInfos } from "core/enums/user-type.enum";
+import 'antd/lib/menu/style/css';
+import { useLocation } from 'react-router-dom';
+import { Link } from 'react-router-dom';
+import { NavigationConfig } from './../../../../../configs/NavConfig';
+import { Grid, X } from 'react-feather';
+import Styled from './SideBar.module.scss';
+import { NavLink } from 'react-router-dom';
+import { navigationDetail } from './../../../../../configs/NavConfig';
+import { useUserAuth } from '../../../../../core/utils/context/AuthenticationContext';
+import Avatar from 'components/common/@vuexy/avatar/AvatarComponent';
+import { User } from 'react-feather';
+import { UserTypeEnum, UserTypeEnumInfos } from 'core/enums/user-type.enum';
 
 export interface IPropsType {
   toggleSidebarMenu: any;
@@ -25,12 +25,7 @@ export interface IPropsType {
 
 const { SubMenu } = Menu;
 
-const SideBar: React.FC<IPropsType> = ({
-  toggle,
-  collapsed,
-  width,
-  sidebarVisibility,
-}) => {
+const SideBar: React.FC<IPropsType> = ({ toggle, collapsed, width, sidebarVisibility }) => {
   const location = useLocation();
   const [state] = useState<any>(NavigationConfig);
   const { role, userInfo } = useUserAuth();
@@ -42,7 +37,7 @@ const SideBar: React.FC<IPropsType> = ({
       ? `${userInfo.name} ${userInfo?.family}`
       : myUserType === UserTypeEnum.Legal
       ? `${userInfo.name}`
-      : "";
+      : '';
 
   useEffect(() => {
     const openKeys: string[] = getOpens();
@@ -54,11 +49,7 @@ const SideBar: React.FC<IPropsType> = ({
     let activePath: string = location.pathname;
 
     navigationDetail.map((item: any) => {
-      if (
-        item.for.some((p: any) =>
-          activePath.toLowerCase().includes(p.toLowerCase())
-        )
-      ) {
+      if (item.for.some((p: any) => activePath.toLowerCase().includes(p.toLowerCase()))) {
         activePath = item.active;
       }
     });
@@ -116,15 +107,13 @@ const SideBar: React.FC<IPropsType> = ({
   };
 
   // css variables
-  const visibilityLogo = collapsedMain ? "d-none" : "d-flex";
-  const visibilityCollapsed = width < 1200 ? "d-none" : "";
-  const justifyHeader = collapsedMain
-    ? "justify-content-center"
-    : "justify-content-between";
+  const visibilityLogo = collapsedMain ? 'd-none' : 'd-flex';
+  const visibilityCollapsed = width < 1200 ? 'd-none' : '';
+  const justifyHeader = collapsedMain ? 'justify-content-center' : 'justify-content-between';
 
   return (
     <>
-      <div style={{ width: "100%", height: "100%" }}>
+      <div style={{ width: '100%', height: '100%' }}>
         <Menu
           selectedKeys={active}
           openKeys={openKeysState}
@@ -134,27 +123,25 @@ const SideBar: React.FC<IPropsType> = ({
           mode="inline"
           theme="light"
           inlineCollapsed={collapsedMain}
-          className={`${Styled["menu"]}`}
+          className={`${Styled['menu']}`}
         >
-          <div className={`${Styled["menu-header"]} ${justifyHeader}`}>
-            <div className={Styled["userInfo-wrapper"]}>
+          <div className={`${Styled['menu-header']} ${justifyHeader}`}>
+            <div className={Styled['userInfo-wrapper']}>
               <Link to="/">
-                <div className={`${Styled["userImg-wrapper"]} mr-1`}>
+                <div className={`${Styled['userImg-wrapper']} mr-1`}>
                   <Avatar className="avatar-xl" icon={<User />} />
                 </div>
               </Link>
 
               {userInfo && (
-                <span className={Styled["userInfo"]}>
+                <span className={Styled['userInfo']}>
                   <p className="text-bold-600">{myUserName}</p>
                   <p>{userInfo.userName}</p>
                 </span>
               )}
             </div>
-            <div className={`${Styled["user-type"]}`}>
-              {userInfo &&
-                userInfo.userType &&
-                UserTypeEnumInfos[myUserType].description}
+            <div className={`${Styled['user-type']}`}>
+              {userInfo && userInfo.userType && UserTypeEnumInfos[myUserType].description}
             </div>
           </div>
           {/* <div className={`${Styled["menu-header"]} ${justifyHeader}`}>
@@ -176,33 +163,23 @@ const SideBar: React.FC<IPropsType> = ({
           {state.map((parent: any) => {
             return parent.children
               ? hasAccess(parent) && (
-                  <SubMenu
-                    key={parent.id}
-                    icon={parent.icon}
-                    title={parent.title}
-                  >
+                  <SubMenu key={parent.id} icon={parent.icon} title={parent.title}>
                     {parent.children.map((item: any) => {
                       return item.children
                         ? hasAccess(item) && (
-                            <SubMenu
-                              key={item.id}
-                              icon={item.icon}
-                              title={item.title}
-                            >
+                            <SubMenu key={item.id} icon={item.icon} title={item.title}>
                               {item.children.map((item2: any) => {
                                 return (
                                   hasAccess(item2) && (
                                     <Menu.Item
                                       title={item2.title}
-                                      style={{ textOverflow: "clip" }}
+                                      style={{ textOverflow: 'clip' }}
                                       key={item2.path}
-                                      onClick={
-                                        collapsedMain
-                                          ? () => {}
-                                          : () => sidebarVisibility()
-                                      }
+                                      onClick={collapsedMain ? () => {} : () => sidebarVisibility()}
                                     >
-                                      <Link to={item2.path}>{item2.title}</Link>
+                                      <Link to={item2.path} target={item.newTab ? '_blank' : '_self'}>
+                                        {item2.title}
+                                      </Link>
                                     </Menu.Item>
                                   )
                                 );
@@ -211,15 +188,13 @@ const SideBar: React.FC<IPropsType> = ({
                           )
                         : hasAccess(item) && (
                             <Menu.Item
-                              onClick={
-                                collapsedMain
-                                  ? () => {}
-                                  : () => sidebarVisibility()
-                              }
+                              onClick={collapsedMain ? () => {} : () => sidebarVisibility()}
                               title={item.title}
                               key={item.path}
                             >
-                              <Link to={item.path}>{item.title}</Link>
+                              <Link to={item.path} target={item.newTab ? '_blank' : '_self'}>
+                                {item.title}
+                              </Link>
                             </Menu.Item>
                           );
                     })}
@@ -230,11 +205,11 @@ const SideBar: React.FC<IPropsType> = ({
                     title={parent.title}
                     key={parent.path}
                     icon={parent.icon}
-                    onClick={
-                      collapsedMain ? () => {} : () => sidebarVisibility()
-                    }
+                    onClick={collapsedMain ? () => {} : () => sidebarVisibility()}
                   >
-                    <Link to={parent.path}>{parent.title}</Link>
+                    <Link to={parent.path} target={parent.newTab ? '_blank' : '_self'}>
+                      {parent.title}
+                    </Link>
                   </Menu.Item>
                 );
           })}

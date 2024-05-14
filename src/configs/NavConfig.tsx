@@ -1,4 +1,4 @@
-import React from "react";
+import React from 'react';
 import {
   Home,
   BookOpen,
@@ -25,8 +25,8 @@ import {
   Table,
   Phone,
   Layers,
-} from "react-feather";
-import { UserRoles } from "../core/enums";
+} from 'react-feather';
+import { UserRoles } from '../core/enums';
 
 interface ISidebarItem {
   id?: any;
@@ -43,14 +43,20 @@ interface ISidebarItemWithChilde extends ISidebarItem {
 }
 export const NavigationConfig: Array<ISidebarItemWithChilde> = [
   {
-    id: "home",
-    title: "داشبورد",
-    path: "/",
+    id: 'home',
+    title: 'داشبورد',
+    path: '/',
     icon: <Home className="sidebar-icon" size={16} />,
     permissions: [UserRoles.UserReal, UserRoles.UserLegal],
   },
- 
-
+  {
+    id: 'user',
+    title: 'کاربران',
+    icon: <User size={20} />,
+    path: '/Users',
+    permissions: [UserRoles.UserReal],
+    newTab: true,
+  },
 ];
 
 export const navigationDetail = [];
