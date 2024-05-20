@@ -3,20 +3,27 @@ import { UseGetUser } from '../../../core/services/api/User.api';
 import { ListTable } from 'components/common/ListTable/ListTable';
 import { Columns } from './Columns';
 import { refetchContext } from 'core/utils/context/EventContext';
-import styled from '../AddUser/AddUser.module.scss';
+import styled from '../UserManagement.module.scss';
 import { FormDivider } from 'components/common/Form/FormDivider/FormDivider';
 
 const UsersList = () => {
-  const { data: users, isSuccess, isLoading } = UseGetUser();
+  const getUsers = UseGetUser();
+
   const { refetchEvent, setRefetchEvent } = useContext(refetchContext);
   const [tableData, setTableData] = useState<any>([]);
 
   useEffect(() => {
-    if (isSuccess && users?.data) {
-      const usersData: any = users?.data;
+    if (getUsers?.data?.data) {
+      getUsers.refetch();
+    }
+  }, [refetchEvent.usersList]);
+
+  useEffect(() => {
+    if (getUsers.isSuccess && getUsers?.data.data) {
+      const usersData: any = getUsers?.data.data;
       setTableData(usersData);
     }
-  }, [users, isSuccess, refetchEvent.userList]);
+  }, [getUsers.data, getUsers.isSuccess]);
 
   return (
     <FormDivider textHeader="لیست کاربران" classNames={styled.formStyle}>
@@ -25,7 +32,7 @@ const UsersList = () => {
         tableData={tableData}
         onPageChange={() => {}}
         getCustomProps={{ setTableData }}
-        isLoading={isLoading}
+        isLoading={getUsers.isLoading}
       />
     </FormDivider>
   );

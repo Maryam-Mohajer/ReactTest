@@ -127,8 +127,8 @@ const SubmitButton: React.FC<IPropTypes> = ({
       {!noSubmit && clearable && (
         <div className={`justify-content-start d-flex ${Styles['mobile-mode']}`}>
           <Button
-            color={color ? color : 'primary'}
-            style={{ backgroundColor: '#49b9a6' }}
+            color={color}
+            style={{ backgroundColor: '#49b9a6', color: 'white' }}
             className={`d-flex align-items-center justify-content-center ${Styles.submit} ${
               isDisabled ? Styles.pointer : null
             }`}
@@ -150,7 +150,8 @@ const SubmitButton: React.FC<IPropTypes> = ({
               className={`d-flex align-items-center justify-content-center ${Styles['remove-btn']} ${
                 clearableDisable ? Styles.pointer : null
               }`}
-              color="primary"
+              color={color}
+              style={{ backgroundColor: '#dfe1e0dc', color: '49b9a6' }}
               outline
               type={'button'}
               disabled={clearableDisable ? true : false}

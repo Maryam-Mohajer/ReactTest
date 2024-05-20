@@ -1,6 +1,5 @@
 import React from 'react';
 import AddUser from './AddUser/AddUser';
-
 import UsersList from './UsersList/UsersList';
 import { CardWrapper } from 'components/common/Wrapper/CardWrapper/CardWrapper';
 import styled from './UserManagement.module.scss';

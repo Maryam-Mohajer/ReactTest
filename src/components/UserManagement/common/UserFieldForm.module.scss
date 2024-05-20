@@ -1,0 +1,35 @@
+.formStyle {
+  margin: 0.5rem 1rem;
+  padding: 1.5rem;
+}
+.btnColor {
+  background-color: '#49b9a6';
+}
+.btnstyle:hover {
+  color: rgba(72, 77, 78, 0.896);
+}
+.editeUserContainer {
+  margin: 2rem 2rem 2rem 1rem;
+  padding: 1rem;
+  font-size: medium;
+}
+
+.formStyle {
+  margin: 0.5rem 1rem 1rem 2rem;
+  padding: 1.5rem;
+}
+.btnContainer {
+  display: flex;
+  flex-direction: row;
+  justify-content: flex-end;
+}
+.btnBack {
+  color: rgb(244, 236, 236);
+  padding: 0.55rem 1.7rem;
+  border: none;
+  border-radius: 7px;
+}
+
+.btn-lightGreen {
+  background-color: #49b9a6;
+}

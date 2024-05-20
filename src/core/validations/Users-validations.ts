@@ -1,3 +1,4 @@
+import { GradeEnum } from 'core/enums/grade.enum';
 import * as Yup from 'yup';
 
 const phoneRegExp = /^(0|0098|\+98)9(0[1-5]|[1 3]\d|2[0-2]|98)\d{7}$/;
@@ -12,5 +13,9 @@ export const UsersValidate = Yup.object().shape({
     value: Yup.number().required('پر کردن این فیلد الزامیست !'),
     label: Yup.string().required('پر کردن این فیلد الزامیست !'),
   }),
-  university: Yup.string().required('پر کردن این فیلد الزامیست !'),
+  university: Yup.string().when('grade.value', {
+    is: GradeEnum.Masters,
+    then: Yup.string().required('پر کردن این فیلد الزامیست !'),
+    otherwise: Yup.string(),
+  }),
 });

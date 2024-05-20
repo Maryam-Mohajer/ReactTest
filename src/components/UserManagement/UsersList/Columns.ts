@@ -25,5 +25,8 @@ export const Columns = [
     accessor: 'operations',
     disableFilters: true,
     Cell: Actions,
+    getProps: (props: any) => ({
+      setTableData: props.setTableData,
+    }),
   },
 ];

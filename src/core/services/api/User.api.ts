@@ -20,6 +20,10 @@ const GetUserById = async (id: number): Promise<AxiosResponse<IAxiosResult>> => 
 const UpdatedUser = async (id: number, data: UserInfo): Promise<AxiosResponse<IAxiosResult>> => {
   return await methods.put(`${MainUrl}/${id}`, data);
 };
+
+const DeleteUser = async (id: number): Promise<AxiosResponse<IAxiosResult>> => {
+  return await methods.delete(`${MainUrl}/${id}`);
+};
 export const UseAddUser = () => {
   return useMutation(AddUser, {});
 };
@@ -31,4 +35,7 @@ export const UseGetUserById = (id: number) => {
 };
 export const UseUpdatedUser = (id: number) => {
   return useMutation((data: UserInfo) => UpdatedUser(id, data));
+};
+export const UseDeleteUser = () => {
+  return useMutation((id: number) => DeleteUser(id), {});
 };
