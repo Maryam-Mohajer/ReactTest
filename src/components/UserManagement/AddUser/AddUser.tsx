@@ -10,14 +10,14 @@ const AddUser = () => {
   const adduser = UseAddUser();
   const { refetchEvent, setRefetchEvent } = useContext(refetchContext);
 
-  const initialValues = {
+  const [initialValues, setInitialValues] = useState({
     name: '',
     lastName: '',
     fatherName: '',
     phoneNumber: '',
-    grade: { value: 0, label: '' },
+    grade: { value: 0, label: 'انتخاب کنید..' },
     university: '',
-  };
+  });
 
   const handleSubmit = (values: any, { resetForm }: any) => {
     const newObj: any = {
@@ -27,6 +27,8 @@ const AddUser = () => {
       phoneNumber: values.phoneNumber,
       grade: values.grade.value,
       university: values.university,
+      lastname: values.lastName,
+      phoneNumer: values.phoneNumber,
     };
     adduser.mutate(newObj, {
       onSuccess: (value: any) => {
@@ -53,7 +55,16 @@ const AddUser = () => {
           getMutate={adduser}
           clearable
           clearableTxt="پاک کردن فرم"
-          onClear={() => {}}
+          onClear={() =>
+            setInitialValues({
+              name: '',
+              lastName: '',
+              fatherName: '',
+              phoneNumber: '',
+              grade: { value: 0, label: '' },
+              university: '',
+            })
+          }
         />
       </Card>
     </>

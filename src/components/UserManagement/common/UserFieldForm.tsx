@@ -2,7 +2,7 @@ import React from 'react';
 import styled from './UserFieldForm.module.scss';
 import { FormDivider, SubmitButton, TextInput } from 'components/common/Form';
 import { UsersValidate } from 'core/validations/Users-validations';
-import { Form, Formik } from 'formik';
+import { Form, Formik, FormikHelpers } from 'formik';
 import TreeColumn from 'components/common/Wrapper/ColumnWrapper/ThreeColumn/ThreeColumn';
 import BasicSelectOption from 'components/common/Form/SelectOptionComponent/BasicSelectOption/BasicSelectOption';
 import { GradeData } from 'core/data/grade.data';
@@ -13,24 +13,24 @@ interface Props {
   textHeader: string;
   initialValues: any;
   addValues?: any;
-  onSubmit: (values: any, resetForm: any) => void;
-  getMutate: any;
   submitBtnText?: string;
-  clearable?: boolean;
-  clearableTxt?: string;
-  onClear?: () => void;
+  clearable: boolean;
+  clearableTxt: string;
+  onSubmit: (values: any, resetForm?: any) => void;
+  onClear: () => void;
+  getMutate: any;
   getMutateById?: any;
 }
 const UserFieldForm = ({
   textHeader,
   initialValues,
   addValues,
-  onSubmit,
-  getMutate,
   submitBtnText,
   clearable,
   clearableTxt,
+  onSubmit,
   onClear,
+  getMutate,
   getMutateById,
 }: Props) => {
   return (
@@ -45,7 +45,7 @@ const UserFieldForm = ({
             validationSchema={UsersValidate}
             enableReinitialize={true}
           >
-            {({ values }) => (
+            {({ values, resetForm }) => (
               <Form>
                 <TreeColumn>
                   <div>
@@ -80,7 +80,7 @@ const UserFieldForm = ({
                       placeholder="شماره تلفن .."
                     />
                   </div>
-                  <div>
+                  <div className={styled.selectFont}>
                     <BasicSelectOption
                       name="grade"
                       data={GradeData}
@@ -103,7 +103,10 @@ const UserFieldForm = ({
                   btnText={submitBtnText}
                   clearable={clearable}
                   clearableTxt={clearableTxt}
-                  onClear={onClear}
+                  onClear={() => {
+                    resetForm();
+                    onClear();
+                  }}
                 />
               </Form>
             )}

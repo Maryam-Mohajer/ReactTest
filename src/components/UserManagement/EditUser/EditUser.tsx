@@ -26,23 +26,20 @@ const EditUserPage = () => {
   });
 
   useEffect(() => {
-    const response = getUserById.data?.data;
+    const response: any = getUserById.data?.data;
     if (response) {
-      setSelectedUser(response);
+      setSelectedUser({
+        ...response,
+        grade: {
+          value: parseInt(response.grade) === GradeEnum.Masters ? GradeEnum.Masters : GradeEnum.Diplom,
+          label:
+            parseInt(response.grade) === GradeEnum.Masters
+              ? GradeLabel[GradeEnum.Masters]
+              : GradeLabel[GradeEnum.Diplom],
+        },
+      });
     }
   }, [id, getUserById.data]);
-
-  const initialValues = {
-    name: selectedUser.name,
-    lastName: selectedUser.lastName,
-    fatherName: selectedUser.fatherName,
-    phoneNumber: selectedUser.phoneNumber,
-    grade: {
-      value: selectedUser.grade,
-      label: selectedUser.grade == GradeEnum.Masters ? GradeLabel[GradeEnum.Masters] : GradeLabel[GradeEnum.Diplom],
-    },
-    university: selectedUser.university,
-  };
 
   const handleEdite = (value: any) => {
     const newObj: any = {
@@ -72,13 +69,15 @@ const EditUserPage = () => {
         <UserFieldForm
           getMutateById={getUserById}
           textHeader="مشاهده و ویرایش اطلاعات کاربر"
-          initialValues={initialValues}
+          initialValues={selectedUser}
           getMutate={editUser}
           submitBtnText="ثبت ویرایش"
           clearable
           clearableTxt="لغو ویرایش"
-          onClear={() => history.push('/Users')}
-          onSubmit={handleEdite}
+          onClear={() => {
+            history.push('/Users');
+          }}
+          onSubmit={(value: any) => handleEdite(value)}
         />
       </CardWrapper>
     </div>
