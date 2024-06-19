@@ -1,4 +1,4 @@
-import React, { useState, useContext } from "react";
+import React, { useState, useContext, ReactNode } from "react";
 
 type globalContextType = {
   // first step
@@ -24,7 +24,11 @@ export const useGlobalState = () => {
   return pc;
 };
 
-const GlobalContext: React.FC = ({ children }) => {
+interface GlobalContextProps {
+  children: ReactNode;
+}
+
+const GlobalContext: React.FC<GlobalContextProps> = ({ children }) => {
   const [registerInfo, setResgisterInfo] = useState(0); // third step
   const [phoneNumber, setPhoneNumber] = useState(""); // third step
   const [mainLocationId, setMainLocationId] = useState<number>(2); // third step

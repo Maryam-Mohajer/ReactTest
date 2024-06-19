@@ -1,4 +1,4 @@
-import React, { useState, useContext } from "react";
+import React, { useState, useContext, ReactNode } from "react";
 import { ToastTypes } from "../../enums";
 import { RegisterStatusType } from "../../models";
 import { ErpConfig } from "../erp/erp-config.utils";
@@ -28,7 +28,11 @@ const useStatusPermission = () => {
   return pr;
 };
 
-const StatusProvider: React.FC = ({ children }) => {
+interface StatusProviderProps {
+  children: ReactNode;
+}
+
+const StatusProvider: React.FC<StatusProviderProps> = ({ children }) => {
   const [statusInfo, setStatusInfo] = useState<IStatus>({
     registerFlow: "primaryRegister",
   });
@@ -122,7 +126,7 @@ const GoToTruePage = (status: number, flow: string, id: string) => {
 };
 
 const CanStatus: React.FC<CanProps> = (props) => {
-  const { children } = props;
+  const { children } : any = props;
   //const history = useHistory();
   const match: any = checkMatch(props);
   const { req_id } = useGlobalState();
@@ -138,7 +142,7 @@ const CanStatus: React.FC<CanProps> = (props) => {
 };
 
 const CanStatusElement: React.FC<CanProps> = (props) => {
-  const { children, status, params } = props;
+  const { children, status, params } : any = props;
   //const history = useHistory();
   try {
     const match: any = String(status) === params?.status ? true : false;

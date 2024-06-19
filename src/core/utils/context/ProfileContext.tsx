@@ -1,4 +1,4 @@
-import React, { useState, useContext } from "react";
+import React, { useState, useContext, ReactNode } from "react";
 
 export const profileContext = React.createContext<any>(null);
 
@@ -10,7 +10,11 @@ export const useRefetchState = () => {
   return pc;
 };
 
-const ProfileProvider: React.FC = ({ children }) => {
+interface ProfileProviderProps {
+  children: ReactNode;
+}
+
+const ProfileProvider: React.FC<ProfileProviderProps> = ({ children }) => {
   const [userProfilePicture, setUserProfilePicture] = useState<Blob|null>(null); 
   const [allowToRefetch, setAllowToRefetch] = useState<number>(1); 
 

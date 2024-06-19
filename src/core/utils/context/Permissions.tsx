@@ -1,4 +1,4 @@
-import React, { useContext, useState } from "react";
+import React, { ReactNode, useContext, useState } from "react";
 import { useHistory } from "react-router-dom";
 
 type PermissionContextValue = {
@@ -17,7 +17,11 @@ const usePermissions = () => {
   return pc;
 };
 
-const PermissionsProvider: React.FC = ({ children }) => {
+interface PermissionsProviderProps {
+  children: ReactNode;
+}
+
+const PermissionsProvider: React.FC<PermissionsProviderProps> = ({ children } : any) => {
   const [permissions, setPermissions] = useState<string[]>([
     "admin:write",
     "admin:read",
@@ -50,7 +54,7 @@ const checkMatch = (userPermissions: string[], canProps: CanProps) => {
 };
 
 const CanPermission: React.FC<CanProps> = (props) => {
-  const { children } = props;
+  const { children } : any = props;
   const { permissions: userPermissions } = usePermissions();
   const history = useHistory();
   const match = checkMatch(userPermissions, props);

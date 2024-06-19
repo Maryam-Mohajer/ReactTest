@@ -1,4 +1,4 @@
-import React, { useContext, useEffect, useState } from "react";
+import React, { ReactNode, useContext, useEffect, useState } from "react";
 import { FallBackSpinner } from "components/common/Spinner/FallBackSpinner/FallbackSpinner";
 import {
   getUser,
@@ -70,7 +70,12 @@ if (parsed && parsed.isFromSabak) {
 }
 const userClaim: any = getUserClaims() ? getUserClaims() : [];
 
-const AuthenticationContext: React.FC = ({ children }) => {
+interface AuthenticationProviderProps {
+  children: ReactNode;
+}
+
+
+const AuthenticationContext: React.FC<AuthenticationProviderProps> = ({ children }) => {
   const [userInfoState, setUserInfoState] = useState<IUserInfo>({
     userType: 0,
     authTime: "",

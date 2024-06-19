@@ -1,4 +1,4 @@
-import React, { useState, useContext } from "react";
+import React, { useState, useContext, ReactNode } from "react";
 
 export const refetchContext = React.createContext<any>(null);
 
@@ -10,7 +10,11 @@ export const useRefetchState = () => {
   return pc;
 };
 
-const RefetchProvider: React.FC = ({ children }) => {
+interface RefetchProviderProps {
+  children: ReactNode;
+}
+
+const RefetchProvider: React.FC<RefetchProviderProps> = ({ children }) => {
   const [refetchEvent, setRefetchEvent] = useState({
     uploadedDocuments : false,
     neededDocuments : false,
