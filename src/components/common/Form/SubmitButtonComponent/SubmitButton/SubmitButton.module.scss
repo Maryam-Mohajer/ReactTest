@@ -1,13 +1,19 @@
 .submit {
   z-index: 0;
 }
+.submit:hover {
+  color: #393b3adc;
+}
 .form-style {
   margin-left: 0 !important;
 }
 .remove-btn {
   margin-left: 10px;
 }
-
+.remove-btn:hover {
+  color: white;
+  background-color: #393b3adc;
+}
 .pointer {
   cursor: not-allowed !important;
 }
