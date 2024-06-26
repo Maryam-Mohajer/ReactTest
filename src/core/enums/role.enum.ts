@@ -1,21 +1,21 @@
 import { EnumModel, EnumRecord } from 'core/models/enum.model';
 
 export enum RoleEnum {
-  CountyAdmin = 1,
-  UnionAdmin = 2,
-  UnionManager = 3,
-  IssuerResponsible = 4,
-  VisitingExpert = 5,
-  CitySecretariat = 6,
+  CountyGuildRoomAdmin = 1008,
+  UnionAdmin = 1011,
+  UnionManager = 4,
+  UnionIssuingResponsible = 6,
   UnionSecretariat = 7,
+  UnionExpert = 8,
+  CountySecretariat = 15,
 }
 
 export const RoleEnumInfos: EnumRecord<RoleEnum, EnumModel> = {
-  [RoleEnum.CountyAdmin]: { description: 'ادمین شهرستان' },
-  [RoleEnum.UnionAdmin]: { description: 'ادمین اتحادیه' },
-  [RoleEnum.UnionManager]: { description: 'مدیر اتحادیه' },
-  [RoleEnum.IssuerResponsible]: { description: 'مسول صدور' },
-  [RoleEnum.VisitingExpert]: { description: 'مسول صدور' },
-  [RoleEnum.CitySecretariat]: { description: 'دبیرخانه شهرستان' },
-  [RoleEnum.UnionSecretariat]: { description: 'دبیرخانه اتحادیه' },
+  [RoleEnum.CountyGuildRoomAdmin]: { description: 'ادمین شهرستان', level: 'county' },
+  [RoleEnum.UnionAdmin]: { description: 'ادمین اتحادیه', level: 'union' },
+  [RoleEnum.UnionManager]: { description: 'مدیر اتحادیه', level: 'union' },
+  [RoleEnum.UnionIssuingResponsible]: { description: 'مسول صدور', level: 'union' },
+  [RoleEnum.UnionExpert]: { description: 'کارشناس', level: 'Expert' },
+  [RoleEnum.CountySecretariat]: { description: 'دبیرخانه شهرستان', level: 'county' },
+  [RoleEnum.UnionSecretariat]: { description: 'دبیرخانه اتحادیه', level: 'union' },
 };

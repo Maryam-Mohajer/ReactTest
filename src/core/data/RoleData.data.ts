@@ -9,6 +9,7 @@ export const RoleData = [
     options: numericValues.map((value: RoleEnum) => ({
       value,
       label: RoleEnumInfos[value].description,
+      level: RoleEnumInfos[value].level,
     })),
   },
 ];
