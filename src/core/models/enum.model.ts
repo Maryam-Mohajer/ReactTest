@@ -1,6 +1,6 @@
 export interface EnumModel {
   description: string;
-  level?: 'county' | 'union' | 'Expert';
+  level?: string;
 }
 
 export type EnumRecord<K extends string | number | symbol, T extends EnumModel> = Record<K, T>;

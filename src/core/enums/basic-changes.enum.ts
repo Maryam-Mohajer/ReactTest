@@ -5,7 +5,7 @@ export enum BaseChangesTypeEnum {
   LicenseRequest = 3,
 }
 export const BaseChangesInfo: EnumRecord<BaseChangesTypeEnum, EnumModel> = {
-  [BaseChangesTypeEnum.UseType]: { description: 'نوع کاربری' },
-  [BaseChangesTypeEnum.MainLocationDivision]: { description: 'تقسیمات کشوری' },
-  [BaseChangesTypeEnum.LicenseRequest]: { description: 'شناسه درخواست' },
+  [BaseChangesTypeEnum.UseType]: { description: 'نوع کاربری', level: '1' },
+  [BaseChangesTypeEnum.MainLocationDivision]: { description: 'تقسیمات کشوری', level: '1' },
+  [BaseChangesTypeEnum.LicenseRequest]: { description: 'شناسه درخواست', level: '2' },
 };

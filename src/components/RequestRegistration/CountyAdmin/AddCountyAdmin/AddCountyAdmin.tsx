@@ -6,19 +6,20 @@ import {
 } from '../../../../core/services/api/change-user-request';
 import { Form, Formik } from 'formik';
 import React, { useState } from 'react';
-import { RoleEnum } from 'core/enums/role.enum';
+import { RoleEnum, RoleEnumInfos } from 'core/enums/role.enum';
 import { RoleData } from 'core/data/RoleData.data';
 import { BasicChangesData } from 'core/data/basic-changes.data';
 import TreeColumn from 'components/common/Wrapper/ColumnWrapper/ThreeColumn/ThreeColumn';
 import { TwoColumn } from 'components/common/Wrapper/ColumnWrapper/TwoColumn/TwoColumn';
-import { BaseChangesTypeEnum } from 'core/enums/basic-changes.enum';
+import { BaseChangesInfo, BaseChangesTypeEnum } from 'core/enums/basic-changes.enum';
 import { ChangesReasonsData } from 'core/data/changes-reasons.data';
 import { ChangesReasonsEnum } from 'core/enums/changes-reasons.enum';
 import { showToast } from 'core/utils/show-toast';
 import { ToastTypes } from 'core/enums';
 import { Alert } from 'reactstrap';
 import { FormGroup } from 'reactstrap';
-import { UsersValidate } from 'core/validations/Users-validation';
+import { UserSchema } from 'core/validations/Users-validation';
+import BasicSelectOption from 'components/common/Form/SelectOptionComponent/BasicSelectOption/BasicSelectOption';
 
 const AddCountyAdmin = () => {
   const changeUserRequest = useSetChangeUserRequestForOthers();
@@ -27,15 +28,15 @@ const AddCountyAdmin = () => {
   const [initialvalues, setinitialvalues] = useState({
     currentNationalCode: '',
     newNationalCode: '',
-    rolesToChange: { value: 0, label: '', level: '' },
-    baseChanges: { value: 0, label: '' },
+    rolesToChange: null,
+    baseChanges: null,
     licenseRequest: '',
     UseTypeIds: [],
     JobIds: [],
     CountyId: '',
     CityOrVillageId: '',
     CountyUnionId: '',
-    changesReasons: { value: 0, label: ' ' },
+    changesReasons: null,
     fileLicenseNumber: '',
     fileLicenseDate: '',
     fileDescription: '',
@@ -44,6 +45,10 @@ const AddCountyAdmin = () => {
   });
   const [currentUser, setCurrentUser] = useState<any>(null);
   const [newUser, setNewUser] = useState<any>(null);
+  const [baseChangesOptions, setBaseChangesOptions] = useState<any>([]);
+  const [selectedBaseChanges, setSelectedBaseChanges] = useState([]);
+  console.log(baseChangesOptions, 'baseChanges');
+  console.log(selectedBaseChanges, 'selectedBaseChanges');
 
   const handleuserSearch = (nationalCode: string, setuser: any) => {
     setuser(null);
@@ -63,9 +68,15 @@ const AddCountyAdmin = () => {
             setuser(userObject);
           }
         },
+        onError: (err) => {
+          console.log(err, 'ee');
+        },
       });
+    } else {
+      showToast(['لطفا کد ملی را وارد نمایید'], ToastTypes.error);
     }
   };
+
   const renderUser = (user: any) => {
     return (
       <div style={{ marginTop: '1rem' }}>
@@ -81,19 +92,35 @@ const AddCountyAdmin = () => {
       </div>
     );
   };
+
+  const handleSelectedbaseChanges = (roles: any, setFieldValue: any) => {
+    setFieldValue('rolesToChange', roles);
+
+    const filterdBaseChanges = BasicChangesData[0].options.filter(
+      (base: any) => base.value !== BaseChangesTypeEnum.UseType,
+    );
+    console.log(filterdBaseChanges, 'filterdBaseChanges');
+
+    return roles.map((role: any) =>
+      role.level === RoleEnumInfos[RoleEnum.UnionExpert].level
+        ? setBaseChangesOptions(BasicChangesData)
+        : setBaseChangesOptions([{ label: 'یک گزینه را انتخاب کنید', options: filterdBaseChanges }]),
+    );
+  };
+
   const handleSubmit = () => {};
 
   return (
     <FormDivider textHeader="">
       <Formik
         initialValues={initialvalues}
+        validationSchema={UserSchema}
         onSubmit={() => {
           handleSubmit();
         }}
         enableReinitialize={true}
-        validationSchema={UsersValidate}
       >
-        {({ values, handleChange }) => (
+        {({ values, handleChange, setFieldValue }) => (
           <Form>
             <TwoColumn>
               <FormGroup>
@@ -127,18 +154,21 @@ const AddCountyAdmin = () => {
               <TwoColumn>
                 <MultiSelectOption
                   options={RoleData}
-                  name="role"
+                  name="rolesToChange"
                   hasLabel
                   labelText="نقش"
                   placeHolder="لطفا نقش را وارد نمایید"
                   significant
-                  onChange={(roles) => {
-                    console.log(roles, 'roles');
+                  onChange={(roles: any) => {
+                    handleSelectedbaseChanges(roles, setFieldValue);
                   }}
                 />
-                {}
                 <MultiSelectOption
-                  options={BasicChangesData}
+                  options={baseChangesOptions}
+                  onChange={(basechanges: any) => {
+                    setFieldValue('baseChanges', basechanges);
+                    setSelectedBaseChanges(basechanges);
+                  }}
                   name="baseChanges"
                   hasLabel
                   labelText="مبنای تغییرات"
@@ -147,32 +177,59 @@ const AddCountyAdmin = () => {
                 />
               </TwoColumn>
             </div>
-            {console.log(
-              values.baseChanges.value,
-              'values.baseChanges.value',
-              BaseChangesTypeEnum.LicenseRequest,
-              'BaseChangesTypeEnum.LicenseRequest',
-            )}
+
             {/* {values.baseChanges && values.baseChanges.value === BaseChangesTypeEnum.LicenseRequest && ( */}
+            {selectedBaseChanges.map((baseChanges: any) =>
+              baseChanges.value === BaseChangesTypeEnum.LicenseRequest ? (
+                <TwoColumn>
+                  <TextInput
+                    name="licenseRequest"
+                    value={values.licenseRequest}
+                    placeholder="شناسه درخواست"
+                    lableText="شناسه درخواست"
+                    significant
+                  />
+                  <MultiSelectOption
+                    options={ChangesReasonsData}
+                    name="changesReasons"
+                    hasLabel
+                    labelText="ادله ی تغییرات"
+                    placeHolder="یک گزینه را انتخاب نمایید"
+                    significant
+                  />
+                </TwoColumn>
+              ) : baseChanges.value === BaseChangesTypeEnum.UseType ? (
+                <TreeColumn>
+                  <MultiSelectOption
+                    options={[]}
+                    name="UseTypeIds"
+                    hasLabel
+                    labelText="نوع کاربری"
+                    placeHolder="یک گزینه را انتخاب نمایید"
+                    significant
+                  />
+                  <MultiSelectOption
+                    options={[]}
+                    name="JobIds"
+                    hasLabel
+                    labelText="شغل"
+                    placeHolder="یک گزینه را انتخاب نمایید"
+                    significant
+                  />
+                  <MultiSelectOption
+                    options={ChangesReasonsData}
+                    name="changesReasons"
+                    hasLabel
+                    labelText="ادله ی تغییرات"
+                    placeHolder="یک گزینه را انتخاب نمایید"
+                    significant
+                  />
+                </TreeColumn>
+              ) : null,
+            )}
             <>
-              <TreeColumn>
-                <TextInput
-                  name="licenseRequest"
-                  value={values.licenseRequest}
-                  placeholder="شناسه درخواست"
-                  lableText="شناسه درخواست"
-                  significant
-                />
-                <MultiSelectOption
-                  options={ChangesReasonsData}
-                  name="changesReasons"
-                  hasLabel
-                  labelText="ادله ی تغییرات"
-                  placeHolder="یک گزینه را انتخاب نمایید"
-                  significant
-                />{' '}
-                <DropZone name="file" lableText="فایل" significant placeholder="لطفا فایل را بارگذاری نمایید" />
-              </TreeColumn>
+              <DropZone name="file" lableText="فایل" significant placeholder="لطفا فایل را بارگذاری نمایید" />
+
               <TextArea
                 lableText="توضیحات"
                 name="description"

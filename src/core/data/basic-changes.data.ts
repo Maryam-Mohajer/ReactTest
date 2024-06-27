@@ -8,6 +8,7 @@ export const BasicChangesData = [
     options: numericValues.map((value: BaseChangesTypeEnum) => ({
       value,
       label: BaseChangesInfo[value].description,
+      level: BaseChangesInfo[value].level,
     })),
   },
 ];
