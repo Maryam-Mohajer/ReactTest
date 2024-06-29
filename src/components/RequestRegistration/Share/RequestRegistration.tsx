@@ -1,40 +1,61 @@
-import { DropZone, FormDivider, MultiSelectOption, SubmitButton, TextArea, TextInput } from 'components/common/Form';
+import {
+  DropZone,
+  FileInput,
+  FormDivider,
+  MultiSelectOption,
+  SubmitButton,
+  TextArea,
+  TextInput,
+} from 'components/common/Form';
 import { InputGroupSearch } from 'components/common/Form/InputComponents/InputGroupSearch/InputGroupSearch';
 import {
   useGetUserByNationalCode,
   useSetChangeUserRequestForOthers,
-} from '../../../../core/services/api/change-user-request';
+} from '../../../core/services/api/change-user-request';
+import { useGetOwnedUserCountyGuildRoomsForAdmin } from '../../../core/services/api/guild-room.api';
+import { useGetAllCityOrRuralTitles } from '../../../core/services/api/location.api';
 import { Form, Formik } from 'formik';
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { RoleEnum, RoleEnumInfos } from 'core/enums/role.enum';
 import { RoleData } from 'core/data/RoleData.data';
 import { BasicChangesData } from 'core/data/basic-changes.data';
 import TreeColumn from 'components/common/Wrapper/ColumnWrapper/ThreeColumn/ThreeColumn';
 import { TwoColumn } from 'components/common/Wrapper/ColumnWrapper/TwoColumn/TwoColumn';
-import { BaseChangesInfo, BaseChangesTypeEnum } from 'core/enums/basic-changes.enum';
+import { BaseChangesInfo, BaseChangesEnum } from 'core/enums/basic-changes.enum';
 import { ChangesReasonsData } from 'core/data/changes-reasons.data';
 import { ChangesReasonsEnum } from 'core/enums/changes-reasons.enum';
 import { showToast } from 'core/utils/show-toast';
-import { ToastTypes } from 'core/enums';
+import { ToastTypes, UserRoles } from 'core/enums';
 import { Alert } from 'reactstrap';
 import { FormGroup } from 'reactstrap';
 import { UserSchema } from 'core/validations/Users-validation';
 import BasicSelectOption from 'components/common/Form/SelectOptionComponent/BasicSelectOption/BasicSelectOption';
+import { Row, Col } from 'reactstrap';
 
-const AddCountyAdmin = () => {
+interface Props {
+  requesterRole: string;
+}
+const RequestRegistration = ({ requesterRole }: Props) => {
   const changeUserRequest = useSetChangeUserRequestForOthers();
   const getUserByNationalCode = useGetUserByNationalCode();
+  const {
+    data: countyData,
+    isLoading: isCountyLoading,
+    isSuccess,
+    refetch,
+  } = useGetOwnedUserCountyGuildRoomsForAdmin();
+  const getCityOrRural = useGetAllCityOrRuralTitles();
 
   const [initialvalues, setinitialvalues] = useState({
     currentNationalCode: '',
     newNationalCode: '',
     rolesToChange: null,
-    baseChanges: null,
+    baseChanges: [],
     licenseRequest: '',
-    UseTypeIds: [],
-    JobIds: [],
-    CountyId: '',
-    CityOrVillageId: '',
+    UseType: [],
+    Job: [],
+    County: '',
+    CityOrVillage: '',
     CountyUnionId: '',
     changesReasons: null,
     fileLicenseNumber: '',
@@ -46,9 +67,17 @@ const AddCountyAdmin = () => {
   const [currentUser, setCurrentUser] = useState<any>(null);
   const [newUser, setNewUser] = useState<any>(null);
   const [baseChangesOptions, setBaseChangesOptions] = useState<any>([]);
-  const [selectedBaseChanges, setSelectedBaseChanges] = useState([]);
-  console.log(baseChangesOptions, 'baseChanges');
-  console.log(selectedBaseChanges, 'selectedBaseChanges');
+  const [countyRoom, setCountyRoom] = useState([]);
+  const [cityOrRural, setCityOrRural] = useState([]);
+
+  useEffect(() => {
+    if (countyData && countyData?.data) {
+      const results = countyData.data.result;
+      const counties: any = [];
+      results.map((result: any) => counties.push({ value: result.id, label: result.countyTitle }));
+      setCountyRoom(counties);
+    }
+  }, [countyData, isSuccess]);
 
   const handleuserSearch = (nationalCode: string, setuser: any) => {
     setuser(null);
@@ -97,9 +126,8 @@ const AddCountyAdmin = () => {
     setFieldValue('rolesToChange', roles);
 
     const filterdBaseChanges = BasicChangesData[0].options.filter(
-      (base: any) => base.value !== BaseChangesTypeEnum.UseType,
+      (base: any) => base.value !== BaseChangesEnum.UseType,
     );
-    console.log(filterdBaseChanges, 'filterdBaseChanges');
 
     return roles.map((role: any) =>
       role.level === RoleEnumInfos[RoleEnum.UnionExpert].level
@@ -165,70 +193,134 @@ const AddCountyAdmin = () => {
                 />
                 <MultiSelectOption
                   options={baseChangesOptions}
-                  onChange={(basechanges: any) => {
-                    setFieldValue('baseChanges', basechanges);
-                    setSelectedBaseChanges(basechanges);
-                  }}
                   name="baseChanges"
                   hasLabel
                   labelText="مبنای تغییرات"
                   placeHolder="یک گزینه را انتخاب نمایید"
                   significant
+                  isLoading={isCountyLoading}
+                  onChange={(baseChanges) => {
+                    setFieldValue('baseChanges', baseChanges);
+                    baseChanges.map((baseChange: any) => {
+                      baseChange.value === BaseChangesEnum.MainLocationDivision && refetch();
+                    });
+                  }}
                 />
               </TwoColumn>
             </div>
 
-            {/* {values.baseChanges && values.baseChanges.value === BaseChangesTypeEnum.LicenseRequest && ( */}
-            {selectedBaseChanges.map((baseChanges: any) =>
-              baseChanges.value === BaseChangesTypeEnum.LicenseRequest ? (
-                <TwoColumn>
-                  <TextInput
-                    name="licenseRequest"
-                    value={values.licenseRequest}
-                    placeholder="شناسه درخواست"
-                    lableText="شناسه درخواست"
-                    significant
-                  />
-                  <MultiSelectOption
-                    options={ChangesReasonsData}
-                    name="changesReasons"
-                    hasLabel
-                    labelText="ادله ی تغییرات"
-                    placeHolder="یک گزینه را انتخاب نمایید"
-                    significant
-                  />
-                </TwoColumn>
-              ) : baseChanges.value === BaseChangesTypeEnum.UseType ? (
-                <TreeColumn>
-                  <MultiSelectOption
-                    options={[]}
-                    name="UseTypeIds"
-                    hasLabel
-                    labelText="نوع کاربری"
-                    placeHolder="یک گزینه را انتخاب نمایید"
-                    significant
-                  />
-                  <MultiSelectOption
-                    options={[]}
-                    name="JobIds"
-                    hasLabel
-                    labelText="شغل"
-                    placeHolder="یک گزینه را انتخاب نمایید"
-                    significant
-                  />
-                  <MultiSelectOption
-                    options={ChangesReasonsData}
-                    name="changesReasons"
-                    hasLabel
-                    labelText="ادله ی تغییرات"
-                    placeHolder="یک گزینه را انتخاب نمایید"
-                    significant
-                  />
-                </TreeColumn>
-              ) : null,
-            )}
+            {values.baseChanges &&
+              values.baseChanges.length > 0 &&
+              values.baseChanges.map((baseChange: any) =>
+                baseChange.value === BaseChangesEnum.LicenseRequest ? (
+                  <TwoColumn>
+                    <TextInput
+                      name="licenseRequest"
+                      value={values.licenseRequest}
+                      placeholder="شناسه درخواست"
+                      lableText="شناسه درخواست"
+                      significant
+                    />
+                  </TwoColumn>
+                ) : (
+                  (baseChange.value === BaseChangesEnum.MainLocationDivision && (
+                    <>
+                      {requesterRole === UserRoles.CountyGuildRoomAdmin ? (
+                        <TreeColumn>
+                          <BasicSelectOption
+                            name="County"
+                            data={countyRoom}
+                            placeHolder="یک گزینه انتخاب نمایید"
+                            lableText="شهرستان"
+                            onChange={(County) => {
+                              setFieldValue('County', County);
+                              if (County.value) {
+                                getCityOrRural.mutate([County.value], {
+                                  onSuccess: (data: any, val: any) => {
+                                    const result = data?.data.result;
+                                    if (result) {
+                                      const cityOrRural: any = [];
+                                      result.map((result: any) =>
+                                        cityOrRural.push({ value: result.id, label: result.title }),
+                                      );
+                                      setCityOrRural(cityOrRural);
+                                    }
+                                  },
+                                  onError: (error: any) => {
+                                    console.error('Error:', error);
+                                  },
+                                });
+                              }
+                            }}
+                          />
+                          <BasicSelectOption
+                            name="CityOrVillage"
+                            data={cityOrRural}
+                            placeHolder="یک گزینه انتخاب نمایید"
+                            lableText="شهر"
+                          />
+                          <BasicSelectOption
+                            name="CityOrVillage"
+                            data={[]}
+                            placeHolder="یک گزینه انتخاب نمایید"
+                            lableText="روستا"
+                          />
+                        </TreeColumn>
+                      ) : requesterRole === UserRoles.UnionAdmin ? (
+                        <TwoColumn>
+                          <BasicSelectOption
+                            name="CountyUnionId"
+                            data={[]}
+                            placeHolder="یک گزینه انتخاب نمایید"
+                            lableText="اتحادیه"
+                          />
+                        </TwoColumn>
+                      ) : null}
+                    </>
+                  )) ||
+                  (baseChange.value === BaseChangesEnum.UseType && (
+                    <>
+                      <TwoColumn>
+                        <BasicSelectOption
+                          name="UseType"
+                          data={[]}
+                          placeHolder="یک گزینه انتخاب نمایید"
+                          lableText="نوع کاربری"
+                        />
+                        <BasicSelectOption name="Job" data={[]} placeHolder="یک گزینه انتخاب نمایید" lableText="شغل" />
+                      </TwoColumn>
+                    </>
+                  ))
+                ),
+              )}
+
             <>
-              <DropZone name="file" lableText="فایل" significant placeholder="لطفا فایل را بارگذاری نمایید" />
+              <Row>
+                <Col>
+                  <MultiSelectOption
+                    options={ChangesReasonsData}
+                    name="changesReasons"
+                    hasLabel
+                    labelText="ادله ی تغییرات"
+                    placeHolder="یک گزینه را انتخاب نمایید"
+                    significant
+                  />
+                </Col>
+                <Col>
+                  <div style={{ marginTop: '1rem' }}>
+                    <FileInput
+                      files={[]}
+                      name="file"
+                      outLine
+                      isSingle
+                      inputText="بارگذاری اسناد"
+                      setFieldValue={(val: any) => {
+                        setFieldValue('file', val);
+                      }}
+                    />
+                  </div>
+                </Col>
+              </Row>
 
               <TextArea
                 lableText="توضیحات"
@@ -238,7 +330,7 @@ const AddCountyAdmin = () => {
                 value={values.description}
               />
             </>
-            {/* )} */}
+
             <SubmitButton isLoading={false} />
           </Form>
         )}
@@ -247,4 +339,4 @@ const AddCountyAdmin = () => {
   );
 };
 
-export default AddCountyAdmin;
+export default RequestRegistration;

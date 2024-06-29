@@ -33,6 +33,17 @@ export const AuthenticatedRoutesConfig: Array<IAuthenticatedRoute> = [
       })),
     ),
     exact: true,
-    roles: [UserRoles.UserLegal, UserRoles.UserReal],
+    roles: [UserRoles.CountyGuildRoomAdmin],
+  },
+  {
+    path: '/Registration/UnionAdmin',
+
+    component: lazy(() =>
+      import('../../screens/Registration/UnionAdminRole/UnionAdminRole').then((module) => ({
+        default: module.default,
+      })),
+    ),
+    exact: true,
+    roles: [UserRoles.UnionAdmin],
   },
 ];
