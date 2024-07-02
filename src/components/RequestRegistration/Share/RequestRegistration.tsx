@@ -31,20 +31,38 @@ import { FormGroup } from 'reactstrap';
 import { UserSchema } from 'core/validations/Users-validation';
 import BasicSelectOption from 'components/common/Form/SelectOptionComponent/BasicSelectOption/BasicSelectOption';
 import { Row, Col } from 'reactstrap';
+import { useGetAllUseTypes, useGetOwnedUserUnionForAdmin } from 'core/services/api/union.api';
+import { useGetAllJobByMultiUseType } from 'core/services/api/jobs.api';
 
 interface Props {
-  requesterRole: string;
+  requesterRole: { label: string | undefined; value: number };
 }
 const RequestRegistration = ({ requesterRole }: Props) => {
   const changeUserRequest = useSetChangeUserRequestForOthers();
+  console.log(changeUserRequest, 'changeUserRequest');
+
   const getUserByNationalCode = useGetUserByNationalCode();
   const {
     data: countyData,
     isLoading: isCountyLoading,
     isSuccess,
-    refetch,
+    refetch: countyRefetch,
   } = useGetOwnedUserCountyGuildRoomsForAdmin();
   const getCityOrRural = useGetAllCityOrRuralTitles();
+  const {
+    data: countyUnionData,
+    isLoading: isCountyUnionLoading,
+    refetch: countyUnionRefetch,
+    isSuccess: isCountyUnionSuccess,
+  } = useGetOwnedUserUnionForAdmin();
+  const {
+    data: useTypesData,
+    isLoading: isUseTypesLoading,
+    isSuccess: isUseTypesSuccess,
+    refetch: refetchUseTypes,
+  } = useGetAllUseTypes();
+
+  const getAllJobs = useGetAllJobByMultiUseType();
 
   const [initialvalues, setinitialvalues] = useState({
     currentNationalCode: '',
@@ -52,11 +70,11 @@ const RequestRegistration = ({ requesterRole }: Props) => {
     rolesToChange: null,
     baseChanges: [],
     licenseRequest: '',
-    UseType: [],
-    Job: [],
-    County: '',
-    CityOrVillage: '',
-    CountyUnionId: '',
+    useTypes: [],
+    jobs: [],
+    county: '',
+    cityOrVillage: null,
+    countyUnion: '',
     changesReasons: null,
     fileLicenseNumber: '',
     fileLicenseDate: '',
@@ -64,11 +82,18 @@ const RequestRegistration = ({ requesterRole }: Props) => {
     file: '',
     description: '',
   });
+  console.log(initialvalues, 'initialvalues');
+
   const [currentUser, setCurrentUser] = useState<any>(null);
   const [newUser, setNewUser] = useState<any>(null);
   const [baseChangesOptions, setBaseChangesOptions] = useState<any>([]);
   const [countyRoom, setCountyRoom] = useState([]);
   const [cityOrRural, setCityOrRural] = useState([]);
+  const [countyUnion, setCountyUnion] = useState([]);
+  const [useTypes, setUseTypes] = useState([]);
+  const [jobs, setJobs] = useState([]);
+  console.log(currentUser, 'currentUser');
+  console.log(cityOrRural, 'cityOrRural');
 
   useEffect(() => {
     if (countyData && countyData?.data) {
@@ -79,14 +104,37 @@ const RequestRegistration = ({ requesterRole }: Props) => {
     }
   }, [countyData, isSuccess]);
 
+  useEffect(() => {
+    const countyUnionsInfo: any = [];
+    if (countyUnionData && countyUnionData?.data) {
+      const unionResults = countyUnionData.data.result;
+      unionResults.unions.map((union: any) =>
+        countyUnionsInfo.push({ value: union.countyId, label: union.unionTitle }),
+      );
+    }
+    setCountyUnion(countyUnionsInfo);
+  }, [countyUnionData, isCountyUnionSuccess]);
+
+  useEffect(() => {
+    const useTypesInfo: any = [];
+    if (useTypesData && useTypesData?.data) {
+      const useTypesResults = useTypesData.data.result;
+      useTypesResults.map((useType: any) => useTypesInfo.push({ value: useType.id, label: useType.title }));
+    }
+    setUseTypes(useTypesInfo);
+  }, [useTypesData, isUseTypesSuccess]);
+
   const handleuserSearch = (nationalCode: string, setuser: any) => {
     setuser(null);
     if (nationalCode) {
       getUserByNationalCode.mutate(nationalCode, {
         onSuccess: (data: any) => {
+          console.log(data, 'datauser');
+
           const result = data.data.result;
           if (result) {
             const userObject = {
+              id: result.id,
               name: result.name,
               lastName: result.lastName,
               fathersName: result.fathersName,
@@ -97,9 +145,7 @@ const RequestRegistration = ({ requesterRole }: Props) => {
             setuser(userObject);
           }
         },
-        onError: (err) => {
-          console.log(err, 'ee');
-        },
+        onError: (err) => {},
       });
     } else {
       showToast(['لطفا کد ملی را وارد نمایید'], ToastTypes.error);
@@ -122,13 +168,11 @@ const RequestRegistration = ({ requesterRole }: Props) => {
     );
   };
 
-  const handleSelectedbaseChanges = (roles: any, setFieldValue: any) => {
+  const handleSelectedRoleChanges = (roles: any, setFieldValue: any) => {
     setFieldValue('rolesToChange', roles);
-
     const filterdBaseChanges = BasicChangesData[0].options.filter(
       (base: any) => base.value !== BaseChangesEnum.UseType,
     );
-
     return roles.map((role: any) =>
       role.level === RoleEnumInfos[RoleEnum.UnionExpert].level
         ? setBaseChangesOptions(BasicChangesData)
@@ -136,19 +180,105 @@ const RequestRegistration = ({ requesterRole }: Props) => {
     );
   };
 
-  const handleSubmit = () => {};
+  const handleSelectedbaseChanges = (baseChanges: any, setFieldValue: any) => {
+    setFieldValue('baseChanges', baseChanges);
+    baseChanges.map((baseChange: any) => {
+      if (baseChange.value === BaseChangesEnum.UseType) {
+        refetchUseTypes();
+      }
+      if (
+        baseChange.value === BaseChangesEnum.MainLocationDivision &&
+        requesterRole.label === UserRoles.CountyGuildRoomAdmin
+      ) {
+        countyRefetch();
+      } else {
+        countyUnionRefetch();
+      }
+    });
+  };
+  console.log(countyData, 'countyData');
+
+  const handleSelectedCounty = (county: any, setFieldValue: any) => {
+    setFieldValue('county', county);
+    if (county.value) {
+      getCityOrRural.mutate([county.value], {
+        onSuccess: (data: any) => {
+          const result = data?.data.result;
+          if (result) {
+            const cityOrRural: any = [];
+            result.map((item: any) => cityOrRural.push({ value: item.id, label: item.title }));
+            setCityOrRural(cityOrRural);
+          }
+        },
+        onError: (error: any) => {
+          console.error('Error:', error);
+        },
+      });
+    }
+  };
+  const handleSelectedUseTypes = (useTypes: any, setFieldValue: any) => {
+    setFieldValue('useTypes', useTypes);
+    if (useTypes.length > 0) {
+      const selectedUseTypeIds: any = [];
+      useTypes.map((useType: any) => selectedUseTypeIds.push(useType.value));
+      getAllJobs.mutate(selectedUseTypeIds, {
+        onSuccess: (data: any) => {
+          const jobsInfo: any = [];
+          if (data && data.data) {
+            const jobsResult = data.data.result;
+            jobsResult.map((job: any) => jobsInfo.push({ value: job.id, label: job.title }));
+          }
+          setJobs(jobsInfo);
+        },
+      });
+    }
+  };
+
+  const handleSubmit = (values: any) => {
+    console.log(values, 'values');
+    console.log(requesterRole.value, ' requesterRole.value');
+
+    const newRequest = {
+      BaseChangesTypes: values.baseChanges.map((change: any) => change.value),
+      RolesToChange: values.rolesToChange.map((role: any) => role.value),
+      RequesterRole: requesterRole.value,
+      CurrentUserInfoId: currentUser ? currentUser.id : null,
+      ProvinceId: null,
+      CountyId: values.county ? values.county.value : null,
+      CountyUnionId: values.countyUnion ? values.countyUnion.value : null,
+      CityOrVillageId: values.cityOrVillage ? values.cityOrVillage.value : null,
+      IsSelectAllUseType: false,
+      IsSelectAllJob: false,
+      UseTypeIds: values.useTypes.map((useType: any) => useType.value),
+      JobIds: values.jobs.map((job: any) => job.value),
+      LicenseRequestId: values.licenseRequest ? parseInt(values.licenseRequest) : null,
+      ChangesReasonsEnum: values.changesReasons ? values.changesReasons.value : null,
+      Description: values.description,
+      FileLicenseNumber: values.fileLicenseNumber,
+      FileLicenseDate: values.fileLicenseDate,
+      FileDescription: values.fileDescription,
+      File: values.file ? values.file : null,
+    };
+
+    changeUserRequest.mutate(newRequest, {
+      onSuccess: (data) => {
+        showToast(['اطلاعات با موفقیت ثبت شد'], ToastTypes.success);
+      },
+      onError: (error) => {
+        showToast(['خطا در ثبت اطلاعات'], ToastTypes.error);
+      },
+    });
+  };
 
   return (
     <FormDivider textHeader="">
       <Formik
         initialValues={initialvalues}
-        validationSchema={UserSchema}
-        onSubmit={() => {
-          handleSubmit();
-        }}
+        // validationSchema={UserSchema}
+        onSubmit={(value) => handleSubmit(value)}
         enableReinitialize={true}
       >
-        {({ values, handleChange, setFieldValue }) => (
+        {({ values, handleChange, setFieldValue, resetForm }) => (
           <Form>
             <TwoColumn>
               <FormGroup>
@@ -188,7 +318,7 @@ const RequestRegistration = ({ requesterRole }: Props) => {
                   placeHolder="لطفا نقش را وارد نمایید"
                   significant
                   onChange={(roles: any) => {
-                    handleSelectedbaseChanges(roles, setFieldValue);
+                    handleSelectedRoleChanges(roles, setFieldValue);
                   }}
                 />
                 <MultiSelectOption
@@ -200,10 +330,7 @@ const RequestRegistration = ({ requesterRole }: Props) => {
                   significant
                   isLoading={isCountyLoading}
                   onChange={(baseChanges) => {
-                    setFieldValue('baseChanges', baseChanges);
-                    baseChanges.map((baseChange: any) => {
-                      baseChange.value === BaseChangesEnum.MainLocationDivision && refetch();
-                    });
+                    handleSelectedbaseChanges(baseChanges, setFieldValue);
                   }}
                 />
               </TwoColumn>
@@ -225,52 +352,29 @@ const RequestRegistration = ({ requesterRole }: Props) => {
                 ) : (
                   (baseChange.value === BaseChangesEnum.MainLocationDivision && (
                     <>
-                      {requesterRole === UserRoles.CountyGuildRoomAdmin ? (
-                        <TreeColumn>
+                      {requesterRole.label === UserRoles.CountyGuildRoomAdmin ? (
+                        <TwoColumn>
                           <BasicSelectOption
-                            name="County"
+                            name="county"
                             data={countyRoom}
                             placeHolder="یک گزینه انتخاب نمایید"
                             lableText="شهرستان"
-                            onChange={(County) => {
-                              setFieldValue('County', County);
-                              if (County.value) {
-                                getCityOrRural.mutate([County.value], {
-                                  onSuccess: (data: any, val: any) => {
-                                    const result = data?.data.result;
-                                    if (result) {
-                                      const cityOrRural: any = [];
-                                      result.map((result: any) =>
-                                        cityOrRural.push({ value: result.id, label: result.title }),
-                                      );
-                                      setCityOrRural(cityOrRural);
-                                    }
-                                  },
-                                  onError: (error: any) => {
-                                    console.error('Error:', error);
-                                  },
-                                });
-                              }
+                            onChange={(county) => {
+                              handleSelectedCounty(county, setFieldValue);
                             }}
                           />
                           <BasicSelectOption
-                            name="CityOrVillage"
+                            name="cityOrVillage"
                             data={cityOrRural}
                             placeHolder="یک گزینه انتخاب نمایید"
-                            lableText="شهر"
+                            lableText="شهر/روستا"
                           />
-                          <BasicSelectOption
-                            name="CityOrVillage"
-                            data={[]}
-                            placeHolder="یک گزینه انتخاب نمایید"
-                            lableText="روستا"
-                          />
-                        </TreeColumn>
-                      ) : requesterRole === UserRoles.UnionAdmin ? (
+                        </TwoColumn>
+                      ) : requesterRole.label === UserRoles.UnionAdmin ? (
                         <TwoColumn>
                           <BasicSelectOption
-                            name="CountyUnionId"
-                            data={[]}
+                            name="countyUnion"
+                            data={countyUnion}
                             placeHolder="یک گزینه انتخاب نمایید"
                             lableText="اتحادیه"
                           />
@@ -281,13 +385,25 @@ const RequestRegistration = ({ requesterRole }: Props) => {
                   (baseChange.value === BaseChangesEnum.UseType && (
                     <>
                       <TwoColumn>
-                        <BasicSelectOption
-                          name="UseType"
-                          data={[]}
+                        <MultiSelectOption
+                          name="useTypes"
+                          options={useTypes}
                           placeHolder="یک گزینه انتخاب نمایید"
-                          lableText="نوع کاربری"
+                          significant
+                          hasLabel
+                          labelText="نوع کاربری"
+                          onChange={(useTypes: any) => {
+                            handleSelectedUseTypes(useTypes, setFieldValue);
+                          }}
                         />
-                        <BasicSelectOption name="Job" data={[]} placeHolder="یک گزینه انتخاب نمایید" lableText="شغل" />
+                        <MultiSelectOption
+                          name="jobs"
+                          options={jobs}
+                          placeHolder="یک گزینه انتخاب نمایید"
+                          hasLabel
+                          labelText="شغل"
+                          significant
+                        />
                       </TwoColumn>
                     </>
                   ))
@@ -295,32 +411,40 @@ const RequestRegistration = ({ requesterRole }: Props) => {
               )}
 
             <>
-              <Row>
-                <Col>
-                  <MultiSelectOption
-                    options={ChangesReasonsData}
-                    name="changesReasons"
-                    hasLabel
-                    labelText="ادله ی تغییرات"
-                    placeHolder="یک گزینه را انتخاب نمایید"
-                    significant
-                  />
-                </Col>
-                <Col>
-                  <div style={{ marginTop: '1rem' }}>
-                    <FileInput
-                      files={[]}
-                      name="file"
-                      outLine
-                      isSingle
-                      inputText="بارگذاری اسناد"
-                      setFieldValue={(val: any) => {
-                        setFieldValue('file', val);
-                      }}
-                    />
-                  </div>
-                </Col>
-              </Row>
+              <BasicSelectOption
+                data={ChangesReasonsData}
+                name="changesReasons"
+                lableText="ادله ی تغییرات"
+                placeHolder="یک گزینه را انتخاب نمایید"
+                significant
+              />
+              <TwoColumn>
+                <TextInput
+                  name="fileLicenseNumber"
+                  value={values.fileLicenseNumber}
+                  placeholder="شماره مجوز فایل"
+                  lableText="شماره مجوز فایل"
+                  significant
+                  onChange={handleChange}
+                />
+                <TextInput
+                  name="fileLicenseDate"
+                  value={values.fileLicenseDate}
+                  placeholder="تاریخ مجوز فایل"
+                  lableText="تاریخ مجوز فایل"
+                  significant
+                  onChange={handleChange}
+                />
+              </TwoColumn>
+              <DropZone lableText="انتخاب فایل" name="file" significant isSingle />
+              <TextInput
+                name="fileDescription"
+                value={values.fileDescription}
+                placeholder="توضیحات فایل"
+                lableText="توضیحات فایل"
+                significant
+                onChange={handleChange}
+              />
 
               <TextArea
                 lableText="توضیحات"
@@ -330,8 +454,15 @@ const RequestRegistration = ({ requesterRole }: Props) => {
                 value={values.description}
               />
             </>
-
-            <SubmitButton isLoading={false} />
+            <SubmitButton
+              isLoading={changeUserRequest.isLoading}
+              btnText="ثبت اطلاعات"
+              clearable
+              clearableTxt="پاک کردن فرم"
+              onClear={() => {
+                resetForm();
+              }}
+            />
           </Form>
         )}
       </Formik>

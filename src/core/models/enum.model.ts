@@ -1,5 +1,6 @@
 export interface EnumModel {
   description: string;
+  label?:string;
   level?: string;
 }
 

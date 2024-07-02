@@ -36,17 +36,17 @@ export const UserSchema = Yup.object().shape({
     .typeError('پر نمودن این فیلد الزامی است'),
 
   licenseRequest: Yup.string().required('پر نمودن این فیلد الزامی است').typeError('پر نمودن این فیلد الزامی است'),
-  UseTypeIds: Yup.array().of(Yup.object().shape({ value: Yup.number(), Label: Yup.string() })),
-  JobIds: Yup.array().of(Yup.object().shape({ value: Yup.number(), Label: Yup.string() })),
-  CountyId: Yup.string().required('پر نمودن این فیلد الزامی است').typeError('پر نمودن این فیلد الزامی است'),
-  CityOrVillageId: Yup.string().required('پر نمودن این فیلد الزامی است').typeError('پر نمودن این فیلد الزامی است'),
-  CountyUnionId: Yup.string().required('پر نمودن این فیلد الزامی است'),
+  useTypes: Yup.array().of(Yup.object().shape({ value: Yup.number(), label: Yup.string() })),
+  jobs: Yup.array().of(Yup.object().shape({ value: Yup.number(), label: Yup.string() })),
+  county: Yup.string().required('پر نمودن این فیلد الزامی است').typeError('پر نمودن این فیلد الزامی است'),
+  cityOrVillage: Yup.string().required('پر نمودن این فیلد الزامی است').typeError('پر نمودن این فیلد الزامی است'),
+  countyUnion: Yup.string().required('پر نمودن این فیلد الزامی است'),
   changesReasons: Yup.array()
-    .of(Yup.object().shape({ value: Yup.number(), Label: Yup.string() }))
+    .of(Yup.object().shape({ value: Yup.number(), label: Yup.string() }))
     .typeError('پر نمودن این فیلد الزامی است'),
-  fileLicenseNumber: Yup.string().required('پر نمودن این فیلد الزامی است').typeError('پر نمودن این فیلد الزامی است'),
-  fileLicenseDate: Yup.string().required('پر نمودن این فیلد الزامی است').typeError('پر نمودن این فیلد الزامی است'),
-  fileDescription: Yup.string().required('پر نمودن این فیلد الزامی است').typeError('پر نمودن این فیلد الزامی است'),
+  // fileLicenseNumber: Yup.string().required('پر نمودن این فیلد الزامی است').typeError('پر نمودن این فیلد الزامی است'),
+  // fileLicenseDate: Yup.string().required('پر نمودن این فیلد الزامی است').typeError('پر نمودن این فیلد الزامی است'),
+  // fileDescription: Yup.string().required('پر نمودن این فیلد الزامی است').typeError('پر نمودن این فیلد الزامی است'),
   file: Yup.string().required('پر نمودن این فیلد الزامی است').typeError('پر نمودن این فیلد الزامی است'),
   description: Yup.string().required('پر نمودن این فیلد الزامی است').typeError('پر نمودن این فیلد الزامی است'),
 });

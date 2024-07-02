@@ -11,8 +11,8 @@ export enum RoleEnum {
 }
 
 export const RoleEnumInfos: EnumRecord<RoleEnum, EnumModel> = {
-  [RoleEnum.CountyGuildRoomAdmin]: { description: 'ادمین شهرستان', level: 'county' },
-  [RoleEnum.UnionAdmin]: { description: 'ادمین اتحادیه', level: 'union' },
+  [RoleEnum.CountyGuildRoomAdmin]: { description: 'ادمین شهرستان', label: 'CountyGuildRoomAdmin', level: 'county' },
+  [RoleEnum.UnionAdmin]: { description: 'ادمین اتحادیه', label: 'UnionAdmin', level: 'union' },
   [RoleEnum.UnionManager]: { description: 'مدیر اتحادیه', level: 'union' },
   [RoleEnum.UnionIssuingResponsible]: { description: 'مسول صدور', level: 'union' },
   [RoleEnum.UnionExpert]: { description: 'کارشناس', level: 'Expert' },
