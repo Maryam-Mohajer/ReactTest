@@ -2,6 +2,7 @@ import {
   DropZone,
   FileInput,
   FormDivider,
+  ModernDatePicker,
   MultiSelectOption,
   SubmitButton,
   TextArea,
@@ -35,19 +36,22 @@ import { useGetAllUseTypes, useGetOwnedUserUnionForAdmin } from 'core/services/a
 import { useGetAllJobByMultiUseType } from 'core/services/api/jobs.api';
 
 interface Props {
-  requesterRole: { label: string | undefined; value: number };
+  requesterRole: { label: any | undefined; value: any };
 }
 const RequestRegistration = ({ requesterRole }: Props) => {
   const changeUserRequest = useSetChangeUserRequestForOthers();
   console.log(changeUserRequest, 'changeUserRequest');
 
   const getUserByNationalCode = useGetUserByNationalCode();
+
   const {
     data: countyData,
     isLoading: isCountyLoading,
     isSuccess,
     refetch: countyRefetch,
   } = useGetOwnedUserCountyGuildRoomsForAdmin();
+  console.log(countyData, 'countyData');
+
   const getCityOrRural = useGetAllCityOrRuralTitles();
   const {
     data: countyUnionData,
@@ -72,9 +76,9 @@ const RequestRegistration = ({ requesterRole }: Props) => {
     licenseRequest: '',
     useTypes: [],
     jobs: [],
-    county: '',
+    county: null,
     cityOrVillage: null,
-    countyUnion: '',
+    countyUnion: null,
     changesReasons: null,
     fileLicenseNumber: '',
     fileLicenseDate: '',
@@ -82,7 +86,6 @@ const RequestRegistration = ({ requesterRole }: Props) => {
     file: '',
     description: '',
   });
-  console.log(initialvalues, 'initialvalues');
 
   const [currentUser, setCurrentUser] = useState<any>(null);
   const [newUser, setNewUser] = useState<any>(null);
@@ -92,8 +95,6 @@ const RequestRegistration = ({ requesterRole }: Props) => {
   const [countyUnion, setCountyUnion] = useState([]);
   const [useTypes, setUseTypes] = useState([]);
   const [jobs, setJobs] = useState([]);
-  console.log(currentUser, 'currentUser');
-  console.log(cityOrRural, 'cityOrRural');
 
   useEffect(() => {
     if (countyData && countyData?.data) {
@@ -196,7 +197,6 @@ const RequestRegistration = ({ requesterRole }: Props) => {
       }
     });
   };
-  console.log(countyData, 'countyData');
 
   const handleSelectedCounty = (county: any, setFieldValue: any) => {
     setFieldValue('county', county);
@@ -216,6 +216,7 @@ const RequestRegistration = ({ requesterRole }: Props) => {
       });
     }
   };
+
   const handleSelectedUseTypes = (useTypes: any, setFieldValue: any) => {
     setFieldValue('useTypes', useTypes);
     if (useTypes.length > 0) {
@@ -238,34 +239,50 @@ const RequestRegistration = ({ requesterRole }: Props) => {
     console.log(values, 'values');
     console.log(requesterRole.value, ' requesterRole.value');
 
-    const newRequest = {
-      BaseChangesTypes: values.baseChanges.map((change: any) => change.value),
-      RolesToChange: values.rolesToChange.map((role: any) => role.value),
-      RequesterRole: requesterRole.value,
-      CurrentUserInfoId: currentUser ? currentUser.id : null,
-      ProvinceId: null,
-      CountyId: values.county ? values.county.value : null,
-      CountyUnionId: values.countyUnion ? values.countyUnion.value : null,
-      CityOrVillageId: values.cityOrVillage ? values.cityOrVillage.value : null,
-      IsSelectAllUseType: false,
-      IsSelectAllJob: false,
-      UseTypeIds: values.useTypes.map((useType: any) => useType.value),
-      JobIds: values.jobs.map((job: any) => job.value),
-      LicenseRequestId: values.licenseRequest ? parseInt(values.licenseRequest) : null,
-      ChangesReasonsEnum: values.changesReasons ? values.changesReasons.value : null,
-      Description: values.description,
-      FileLicenseNumber: values.fileLicenseNumber,
-      FileLicenseDate: values.fileLicenseDate,
-      FileDescription: values.fileDescription,
-      File: values.file ? values.file : null,
-    };
+    const formData: any = new FormData();
 
-    changeUserRequest.mutate(newRequest, {
+    if (!values.file || !(values.file.length > 0)) {
+      showToast(['لطفا فایل را انتخاب کنید!'], ToastTypes.error);
+      return;
+    }
+
+    if (values.file) {
+      for (let file of values.file) {
+        formData.append(`File`, file);
+      }
+    }
+
+    formData.append(
+      'BaseChangesTypes',
+      values.baseChanges.map((change: any) => change.value),
+    );
+    formData.append(
+      'RolesToChange',
+      values.rolesToChange.map((role: any) => role.value),
+    );
+    formData.append('RequesterRole', requesterRole.value);
+    formData.append('CurrentUserInfoId', currentUser.id);
+    formData.append('ProvinceId', null);
+    formData.append('CountyId', values.county ? values.county.value : null);
+    formData.append('CountyUnionId', values.countyUnion ? values.countyUnion.value : null);
+    formData.append('CityOrVillageId', values.cityOrVillage ? values.cityOrVillage.value : null);
+    formData.append('IsSelectAllUseType', false);
+    formData.append('IsSelectAllJob', false);
+    values.useTypes.forEach((type: any, index: any) => formData.append(`UseTypeIds[${index}]`, type.value));
+    values.jobs.forEach((job: any, index: any) => formData.append(`JobIds[${index}]`, job.value));
+    formData.append('LicenseRequestId', values.licenseRequest ? parseInt(values.licenseRequest) : null);
+    formData.append('ChangesReasonsEnum', values.changesReasons ? values.changesReasons.value : null);
+    formData.append('Description', values.description);
+    formData.append('FileLicenseNumber', values.fileLicenseNumber);
+    formData.append('FileLicenseDate', values.fileLicenseDate);
+    formData.append('FileDescription', values.fileDescription);
+
+    changeUserRequest.mutate(formData, {
       onSuccess: (data) => {
         showToast(['اطلاعات با موفقیت ثبت شد'], ToastTypes.success);
       },
-      onError: (error) => {
-        showToast(['خطا در ثبت اطلاعات'], ToastTypes.error);
+      onError: (error: any) => {
+        showToast([error.message], ToastTypes.error);
       },
     });
   };
@@ -275,7 +292,7 @@ const RequestRegistration = ({ requesterRole }: Props) => {
       <Formik
         initialValues={initialvalues}
         // validationSchema={UserSchema}
-        onSubmit={(value) => handleSubmit(value)}
+        onSubmit={handleSubmit}
         enableReinitialize={true}
       >
         {({ values, handleChange, setFieldValue, resetForm }) => (
@@ -425,15 +442,14 @@ const RequestRegistration = ({ requesterRole }: Props) => {
                   placeholder="شماره مجوز فایل"
                   lableText="شماره مجوز فایل"
                   significant
-                  onChange={handleChange}
                 />
-                <TextInput
+
+                <ModernDatePicker
                   name="fileLicenseDate"
-                  value={values.fileLicenseDate}
-                  placeholder="تاریخ مجوز فایل"
                   lableText="تاریخ مجوز فایل"
-                  significant
-                  onChange={handleChange}
+                  placeholder="تاریخ مجوز فایل"
+                  hasMaximum={false}
+                  initialValue={values.fileLicenseDate}
                 />
               </TwoColumn>
               <DropZone lableText="انتخاب فایل" name="file" significant isSingle />
@@ -443,7 +459,6 @@ const RequestRegistration = ({ requesterRole }: Props) => {
                 placeholder="توضیحات فایل"
                 lableText="توضیحات فایل"
                 significant
-                onChange={handleChange}
               />
 
               <TextArea
