@@ -22,31 +22,41 @@ export const UserSchema = Yup.object().shape({
 
   baseChanges: Yup.array()
     .of(
-      Yup.object()
-        .shape({ value: Yup.number(), label: Yup.string().nullable(), level: Yup.string() })
-        .required('پر نمودن این فیلد الزامی است'),
+      Yup.object().shape({ value: Yup.number(), label: Yup.string().nullable(), level: Yup.string() })
+      .required('پر نمودن این فیلد الزامی است'),
     )
-    .test('rolesToChange', 'فقط مبناهای هم سطح را می توانید انتخاب کنید', function (bases) {
+    .test('baseChanges', 'فقط مبناهای هم سطح را می توانید انتخاب کنید', function (bases) {
       if (!bases || bases.length === 0) {
         return true;
       }
       const levels = bases.map((base: any) => base.level);
       return levels.every((level) => level === levels[0]);
     })
-    .typeError('پر نمودن این فیلد الزامی است'),
+  .typeError('پر نمودن این فیلد الزامی است'),
 
   licenseRequest: Yup.string().required('پر نمودن این فیلد الزامی است').typeError('پر نمودن این فیلد الزامی است'),
   useTypes: Yup.array().of(Yup.object().shape({ value: Yup.number(), label: Yup.string() })),
   jobs: Yup.array().of(Yup.object().shape({ value: Yup.number(), label: Yup.string() })),
-  county: Yup.string().required('پر نمودن این فیلد الزامی است').typeError('پر نمودن این فیلد الزامی است'),
-  cityOrVillage: Yup.string().required('پر نمودن این فیلد الزامی است').typeError('پر نمودن این فیلد الزامی است'),
-  countyUnion: Yup.string().required('پر نمودن این فیلد الزامی است'),
-  changesReasons: Yup.array()
-    .of(Yup.object().shape({ value: Yup.number(), label: Yup.string() }))
+  province: Yup.string(),
+  county: Yup.object()
+    .shape({ value: Yup.number(), label: Yup.string() })
+    .required('پر نمودن این فیلد الزامی است')
     .typeError('پر نمودن این فیلد الزامی است'),
-  // fileLicenseNumber: Yup.string().required('پر نمودن این فیلد الزامی است').typeError('پر نمودن این فیلد الزامی است'),
-  // fileLicenseDate: Yup.string().required('پر نمودن این فیلد الزامی است').typeError('پر نمودن این فیلد الزامی است'),
-  // fileDescription: Yup.string().required('پر نمودن این فیلد الزامی است').typeError('پر نمودن این فیلد الزامی است'),
+  cityOrVillage: Yup.object()
+    .shape({ value: Yup.number(), label: Yup.string() })
+    .required('پر نمودن این فیلد الزامی است')
+    .typeError('پر نمودن این فیلد الزامی است'),
+  countyUnion: Yup.object()
+    .shape({ value: Yup.number(), label: Yup.string() })
+    .required('پر نمودن این فیلد الزامی است')
+    .typeError('پر نمودن این فیلد الزامی است'),
+  changesReasons: Yup.object()
+    .shape({ value: Yup.number(), label: Yup.string() })
+    .required('پر نمودن این فیلد الزامی است')
+    .typeError('پر نمودن این فیلد الزامی است'),
+  fileLicenseNumber: Yup.string().required('پر نمودن این فیلد الزامی است').typeError('پر نمودن این فیلد الزامی است'),
+  fileLicenseDate: Yup.string().required('پر نمودن این فیلد الزامی است').typeError('پر نمودن این فیلد الزامی است'),
+  fileDescription: Yup.string().required('پر نمودن این فیلد الزامی است').typeError('پر نمودن این فیلد الزامی است'),
   file: Yup.string().required('پر نمودن این فیلد الزامی است').typeError('پر نمودن این فیلد الزامی است'),
   description: Yup.string().required('پر نمودن این فیلد الزامی است').typeError('پر نمودن این فیلد الزامی است'),
 });

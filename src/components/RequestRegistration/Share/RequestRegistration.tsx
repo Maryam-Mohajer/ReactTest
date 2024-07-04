@@ -76,6 +76,7 @@ const RequestRegistration = ({ requesterRole }: Props) => {
     licenseRequest: '',
     useTypes: [],
     jobs: [],
+    province: null,
     county: null,
     cityOrVillage: null,
     countyUnion: null,
@@ -262,15 +263,18 @@ const RequestRegistration = ({ requesterRole }: Props) => {
     );
     formData.append('RequesterRole', requesterRole.value);
     formData.append('CurrentUserInfoId', currentUser.id);
-    formData.append('ProvinceId', null);
-    formData.append('CountyId', values.county ? values.county.value : null);
-    formData.append('CountyUnionId', values.countyUnion ? values.countyUnion.value : null);
-    formData.append('CityOrVillageId', values.cityOrVillage ? values.cityOrVillage.value : null);
+    values.province && formData.append('ProvinceId', values.province);
+    values.county && formData.append('CountyId', values.county.value);
+
+    values.cityOrVillage && formData.append('CityOrVillageId', values.cityOrVillage.value);
+    values.countyUnion && formData.append('CountyUnionId', values.countyUnion.value);
     formData.append('IsSelectAllUseType', false);
     formData.append('IsSelectAllJob', false);
-    values.useTypes.forEach((type: any, index: any) => formData.append(`UseTypeIds[${index}]`, type.value));
-    values.jobs.forEach((job: any, index: any) => formData.append(`JobIds[${index}]`, job.value));
-    formData.append('LicenseRequestId', values.licenseRequest ? parseInt(values.licenseRequest) : null);
+    values.useTypes.length > 0 &&
+      values.useTypes.forEach((type: any, index: any) => formData.append(`UseTypeIds[${index}]`, type.value));
+    values.jobs.length > 0 &&
+      values.jobs.forEach((job: any, index: any) => formData.append(`JobIds[${index}]`, job.value));
+    values.licenseRequest && formData.append('LicenseRequestId', parseInt(values.licenseRequest));
     formData.append('ChangesReasonsEnum', values.changesReasons ? values.changesReasons.value : null);
     formData.append('Description', values.description);
     formData.append('FileLicenseNumber', values.fileLicenseNumber);
@@ -279,10 +283,12 @@ const RequestRegistration = ({ requesterRole }: Props) => {
 
     changeUserRequest.mutate(formData, {
       onSuccess: (data) => {
+        console.log(data, 'data_mute');
         showToast(['اطلاعات با موفقیت ثبت شد'], ToastTypes.success);
       },
+
       onError: (error: any) => {
-        showToast([error.message], ToastTypes.error);
+        showToast(['در ثبت اطلاعات مشکلی به وجود آمده است'], ToastTypes.error);
       },
     });
   };
@@ -291,7 +297,7 @@ const RequestRegistration = ({ requesterRole }: Props) => {
     <FormDivider textHeader="">
       <Formik
         initialValues={initialvalues}
-        // validationSchema={UserSchema}
+        validationSchema={UserSchema}
         onSubmit={handleSubmit}
         enableReinitialize={true}
       >
