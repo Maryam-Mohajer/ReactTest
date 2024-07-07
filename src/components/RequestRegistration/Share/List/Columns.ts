@@ -8,7 +8,6 @@ export const Columns = [
       {
         Header: '',
         accessor: 'rowNumber',
-        disableFilters: true,
         width: 40,
       },
     ],
@@ -22,7 +21,6 @@ export const Columns = [
       {
         Header: '',
         accessor: 'groupId',
-        disableFilters: true,
         width: 40,
       },
     ],
@@ -33,15 +31,11 @@ export const Columns = [
     Header: 'کاربر فعلی',
     columns: [
       {
-        Header: 'نام',
-        accessor: 'currentUserInfo.firstName',
+        Header: 'نام و نام خانوادگی',
+        accessor: 'currentUserInfo.fullName',
         disableFilters: true,
       },
-      {
-        Header: 'نام خانوادگی',
-        accessor: 'currentUserInfo.lastName',
-        disableFilters: true,
-      },
+
       {
         Header: 'شماره تلفن',
         accessor: 'currentUserInfo.phoneNumber',
@@ -55,15 +49,11 @@ export const Columns = [
     Header: 'کاربر جدید',
     columns: [
       {
-        Header: 'نام',
-        accessor: 'newUserInfo.firstName',
+        Header: 'نام و نام خانوادگی',
+        accessor: 'newUserInfo.fullName',
         disableFilters: true,
       },
-      {
-        Header: 'نام خانوادگی',
-        accessor: 'newUserInfo.lastName',
-        disableFilters: true,
-      },
+
       {
         Header: 'شماره تلفن',
         accessor: 'newUserInfo.phoneNumber',
@@ -73,7 +63,6 @@ export const Columns = [
     ],
     disableFilters: true,
   },
-
   {
     Header: 'عملیات ',
     accessor: 'operations',

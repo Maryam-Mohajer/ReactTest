@@ -15,7 +15,7 @@ import {
 } from '../../../core/services/api/change-user-request';
 import { useGetOwnedUserCountyGuildRoomsForAdmin } from '../../../core/services/api/guild-room.api';
 import { useGetAllCityOrRuralTitles } from '../../../core/services/api/location.api';
-import { Form, Formik } from 'formik';
+import { Form, Formik, FormikHelpers } from 'formik';
 import React, { useEffect, useState } from 'react';
 import { RoleEnum, RoleEnumInfos } from 'core/enums/role.enum';
 import { RoleData } from 'core/data/RoleData.data';
@@ -31,12 +31,8 @@ import { Alert } from 'reactstrap';
 import { FormGroup } from 'reactstrap';
 import { UserSchema } from 'core/validations/Users-validation';
 import BasicSelectOption from 'components/common/Form/SelectOptionComponent/BasicSelectOption/BasicSelectOption';
-import { Row, Col } from 'reactstrap';
 import { useGetAllUseTypes, useGetOwnedUserUnionForAdmin } from 'core/services/api/union.api';
 import { useGetAllJobByMultiUseType } from 'core/services/api/jobs.api';
-import { Button } from 'reactstrap';
-import PrimaryButton from 'components/common/Buttons/PrimaryButton/PrimaryButton';
-
 
 interface Props {
   requesterRole: { label: any | undefined; value: any };
@@ -53,7 +49,6 @@ const RequestRegistration = ({ requesterRole }: Props) => {
     isSuccess,
     refetch: countyRefetch,
   } = useGetOwnedUserCountyGuildRoomsForAdmin();
-  console.log(countyData, 'countyData');
 
   const getCityOrRural = useGetAllCityOrRuralTitles();
   const {
@@ -99,7 +94,7 @@ const RequestRegistration = ({ requesterRole }: Props) => {
   const [countyUnion, setCountyUnion] = useState([]);
   const [useTypes, setUseTypes] = useState([]);
   const [jobs, setJobs] = useState([]);
-  const [isOpen, setIsOpen] = useState(false);
+
   useEffect(() => {
     if (countyData && countyData?.data) {
       const results = countyData.data.result;
@@ -134,8 +129,6 @@ const RequestRegistration = ({ requesterRole }: Props) => {
     if (nationalCode) {
       getUserByNationalCode.mutate(nationalCode, {
         onSuccess: (data: any) => {
-          console.log(data, 'datauser');
-
           const result = data.data.result;
           if (result) {
             const userObject = {
@@ -239,12 +232,16 @@ const RequestRegistration = ({ requesterRole }: Props) => {
     }
   };
 
-  const handleSubmit = (values: any) => {
+  const resetToDefault = ({ resetForm }: any) => {
+    resetForm();
+    setCurrentUser(null);
+    setNewUser(null);
+  };
+  
+  const handleSubmit = (values: any, { resetForm }: any) => {
     console.log(values, 'values');
-    console.log(requesterRole.value, ' requesterRole.value');
 
     const formData: any = new FormData();
-
     if (!values.file || !(values.file.length > 0)) {
       showToast(['لطفا فایل را انتخاب کنید!'], ToastTypes.error);
       return;
@@ -286,12 +283,13 @@ const RequestRegistration = ({ requesterRole }: Props) => {
 
     changeUserRequest.mutate(formData, {
       onSuccess: (data) => {
-        console.log(data, 'data_mute');
         showToast(['اطلاعات با موفقیت ثبت شد'], ToastTypes.success);
+        resetToDefault({resetForm});
       },
 
       onError: (error: any) => {
         showToast(['در ثبت اطلاعات مشکلی به وجود آمده است'], ToastTypes.error);
+        resetToDefault({resetForm});
       },
     });
   };
@@ -300,7 +298,7 @@ const RequestRegistration = ({ requesterRole }: Props) => {
     <FormDivider textHeader="">
       <Formik
         initialValues={initialvalues}
-        validationSchema={UserSchema}
+        validationSchema={() => UserSchema(requesterRole.label)}
         onSubmit={handleSubmit}
         enableReinitialize={true}
       >
@@ -354,7 +352,6 @@ const RequestRegistration = ({ requesterRole }: Props) => {
                   labelText="مبنای تغییرات"
                   placeHolder="یک گزینه را انتخاب نمایید"
                   significant
-                  isLoading={isCountyLoading}
                   onChange={(baseChanges) => {
                     handleSelectedbaseChanges(baseChanges, setFieldValue);
                   }}
@@ -388,12 +385,14 @@ const RequestRegistration = ({ requesterRole }: Props) => {
                             onChange={(county) => {
                               handleSelectedCounty(county, setFieldValue);
                             }}
+                            isLoading={isCountyLoading}
                           />
                           <BasicSelectOption
                             name="cityOrVillage"
                             data={cityOrRural}
                             placeHolder="یک گزینه انتخاب نمایید"
                             lableText="شهر/روستا"
+                            isLoading={getCityOrRural.isLoading}
                           />
                         </TwoColumn>
                       ) : requesterRole.label === UserRoles.UnionAdmin ? (
@@ -403,6 +402,7 @@ const RequestRegistration = ({ requesterRole }: Props) => {
                             data={countyUnion}
                             placeHolder="یک گزینه انتخاب نمایید"
                             lableText="اتحادیه"
+                            isLoading={isCountyUnionLoading}
                           />
                         </TwoColumn>
                       ) : null}
@@ -421,6 +421,7 @@ const RequestRegistration = ({ requesterRole }: Props) => {
                           onChange={(useTypes: any) => {
                             handleSelectedUseTypes(useTypes, setFieldValue);
                           }}
+                          isLoading={isUseTypesLoading}
                         />
                         <MultiSelectOption
                           name="jobs"
@@ -429,6 +430,7 @@ const RequestRegistration = ({ requesterRole }: Props) => {
                           hasLabel
                           labelText="شغل"
                           significant
+                          isLoading={getAllJobs.isLoading}
                         />
                       </TwoColumn>
                     </>
@@ -444,7 +446,7 @@ const RequestRegistration = ({ requesterRole }: Props) => {
                 placeHolder="یک گزینه را انتخاب نمایید"
                 significant
               />
-          <TwoColumn>
+              <TwoColumn>
                 <TextInput
                   name="fileLicenseNumber"
                   value={values.fileLicenseNumber}
@@ -468,8 +470,8 @@ const RequestRegistration = ({ requesterRole }: Props) => {
                 placeholder="توضیحات فایل"
                 lableText="توضیحات فایل"
                 significant
-              /> 
-        
+              />
+
               <TextArea
                 lableText="توضیحات"
                 name="description"

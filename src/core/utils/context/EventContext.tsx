@@ -16,6 +16,7 @@ const RefetchProvider: React.FC = ({ children }) => {
     neededDocuments : false,
     realUserJobInfoList : false,
     
+    
   }); 
 
 
