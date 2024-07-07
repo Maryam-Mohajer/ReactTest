@@ -19,6 +19,7 @@ const GetAllChangeUserRequestsForOthers = async (data: any): Promise<AxiosRespon
   return await methods.post(`${MainUrl}/api/ChangeUserRequest/GetAllChangeUserRequestsForOthers`, data);
 };
 
+
 export const useGetAllChangeUserRequestsForOthers = () => {
   return useMutation(GetAllChangeUserRequestsForOthers, {});
 };

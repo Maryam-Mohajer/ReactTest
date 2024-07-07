@@ -34,6 +34,9 @@ import BasicSelectOption from 'components/common/Form/SelectOptionComponent/Basi
 import { Row, Col } from 'reactstrap';
 import { useGetAllUseTypes, useGetOwnedUserUnionForAdmin } from 'core/services/api/union.api';
 import { useGetAllJobByMultiUseType } from 'core/services/api/jobs.api';
+import { Button } from 'reactstrap';
+import PrimaryButton from 'components/common/Buttons/PrimaryButton/PrimaryButton';
+
 
 interface Props {
   requesterRole: { label: any | undefined; value: any };
@@ -96,7 +99,7 @@ const RequestRegistration = ({ requesterRole }: Props) => {
   const [countyUnion, setCountyUnion] = useState([]);
   const [useTypes, setUseTypes] = useState([]);
   const [jobs, setJobs] = useState([]);
-
+  const [isOpen, setIsOpen] = useState(false);
   useEffect(() => {
     if (countyData && countyData?.data) {
       const results = countyData.data.result;
@@ -441,7 +444,7 @@ const RequestRegistration = ({ requesterRole }: Props) => {
                 placeHolder="یک گزینه را انتخاب نمایید"
                 significant
               />
-              <TwoColumn>
+          <TwoColumn>
                 <TextInput
                   name="fileLicenseNumber"
                   value={values.fileLicenseNumber}
@@ -465,8 +468,8 @@ const RequestRegistration = ({ requesterRole }: Props) => {
                 placeholder="توضیحات فایل"
                 lableText="توضیحات فایل"
                 significant
-              />
-
+              /> 
+        
               <TextArea
                 lableText="توضیحات"
                 name="description"
