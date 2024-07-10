@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React from 'react';
 import { Button } from 'reactstrap';
 
 interface IPropTypes {
@@ -17,7 +17,6 @@ const Actions: React.FC<IPropTypes> = ({
     },
   },
 }) => {
- 
   return (
     <>
       <Button

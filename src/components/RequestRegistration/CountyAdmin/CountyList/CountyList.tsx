@@ -1,11 +1,11 @@
 import React from 'react';
 import List from 'components/RequestRegistration/Share/List/List';
-import { UserRoles } from 'core/enums';
+import { RoleEnum } from 'core/enums/role.enum';
 
 const CountyList = () => {
   return (
     <>
-      <List requesterRole={UserRoles.CountyGuildRoomAdmin} />
+      <List requesterRole={RoleEnum.CountyGuildRoomAdmin} />
     </>
   );
 };

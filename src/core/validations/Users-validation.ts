@@ -1,5 +1,6 @@
 import { UserRoles } from 'core/enums';
 import { BaseChangesEnum } from 'core/enums/basic-changes.enum';
+import { RoleEnum } from 'core/enums/role.enum';
 import * as Yup from 'yup';
 
 const selectBaseChanges = (baseChanges: any, enumItem: any) =>
@@ -42,7 +43,7 @@ export const UserSchema = (requesterRole: any) =>
       if (
         baseChanges &&
         baseChanges.length > 0 &&
-        requesterRole === UserRoles.CountyGuildRoomAdmin &&
+        requesterRole === RoleEnum.CountyGuildRoomAdmin &&
         baseChanges.some((baseChange: any) => baseChange.value === BaseChangesEnum.LicenseRequest)
       ) {
         return schema.required('لطفا یک گزینه را انتخاب کنید').typeError('لطفا یک گزینه را انتخاب کنید');
@@ -56,7 +57,6 @@ export const UserSchema = (requesterRole: any) =>
         if (
           baseChanges &&
           baseChanges.length > 0 &&
-          requesterRole === UserRoles.CountyGuildRoomAdmin &&
           baseChanges.some((baseChange: any) => baseChange.value === BaseChangesEnum.UseType)
         ) {
           return schema.required('لطفا یک گزینه را انتخاب کنید').typeError('لطفا یک گزینه را انتخاب کنید');
@@ -72,7 +72,6 @@ export const UserSchema = (requesterRole: any) =>
           if (
             baseChanges &&
             baseChanges.length > 0 &&
-            requesterRole === UserRoles.CountyGuildRoomAdmin &&
             baseChanges.some((baseChange: any) => baseChange.value === BaseChangesEnum.UseType)
           ) {
             return schema.required('لطفا یک گزینه را انتخاب کنید').typeError('لطفا یک گزینه را انتخاب کنید');
@@ -88,9 +87,10 @@ export const UserSchema = (requesterRole: any) =>
         if (
           baseChanges &&
           baseChanges.length > 0 &&
+          requesterRole === RoleEnum.CountyGuildRoomAdmin &&
           baseChanges.some((baseChange: any) => baseChange.value === BaseChangesEnum.MainLocationDivision)
         ) {
-          return schema.required('لطفا یک گزینه را انتخاب کنید').typeError('لطفا یک گزینه را انتخاب کنید');
+          return schema.required('لطفا یک گزینه راانتخاب کنید').typeError('لطفا یک گزینه را انتخاب کنید');
         } else {
           return schema.nullable().notRequired();
         }
@@ -105,7 +105,7 @@ export const UserSchema = (requesterRole: any) =>
         if (
           baseChanges &&
           baseChanges.length > 0 &&
-          requesterRole === UserRoles.CountyGuildRoomAdmin &&
+          requesterRole === RoleEnum.CountyGuildRoomAdmin &&
           baseChanges.some((baseChange: any) => baseChange.value === BaseChangesEnum.MainLocationDivision)
         ) {
           return schema.required('لطفا یک گزینه را انتخاب کنید').typeError('لطفا یک گزینه را انتخاب کنید');
@@ -120,22 +120,12 @@ export const UserSchema = (requesterRole: any) =>
         if (
           baseChanges &&
           baseChanges?.length > 0 &&
-          requesterRole === UserRoles.UnionAdmin &&
+          requesterRole === RoleEnum.UnionAdmin &&
           baseChanges.some((baseChange: any) => baseChange.value === BaseChangesEnum.MainLocationDivision)
         ) {
           return schema.required('لطفا یک گزینه را انتخاب کنید').typeError('لطفا یک گزینه را انتخاب کنید');
         }
         return schema.nullable().notRequired();
-
-        // is: (baseChanges: any) =>
-        //   requesterRole === UserRoles.UnionAdmin &&
-
-        //   baseChanges.some((baseChange: any) => baseChange.value === BaseChangesEnum.MainLocationDivision),
-        // then:
-        //  Yup.object()
-        //   .required('پر نمودن این فیلد الزامی است')
-        //   .typeError('پر نمودن این فیلد الزامی است'),
-        //   otherwise: Yup.object().notRequired(),
       }),
 
     changesReasons: Yup.object()

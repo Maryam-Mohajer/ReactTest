@@ -1,75 +1,43 @@
-import {
-  DropZone,
-  FileInput,
-  FormDivider,
-  ModernDatePicker,
-  MultiSelectOption,
-  SubmitButton,
-  TextArea,
-  TextInput,
-} from 'components/common/Form';
+import { FormDivider, MultiSelectOption, SubmitButton, TextArea } from 'components/common/Form';
 import { InputGroupSearch } from 'components/common/Form/InputComponents/InputGroupSearch/InputGroupSearch';
 import {
   useGetUserByNationalCode,
   useSetChangeUserRequestForOthers,
 } from '../../../core/services/api/change-user-request';
-import { useGetOwnedUserCountyGuildRoomsForAdmin } from '../../../core/services/api/guild-room.api';
-import { useGetAllCityOrRuralTitles } from '../../../core/services/api/location.api';
-import { Form, Formik, FormikHelpers } from 'formik';
-import React, { useEffect, useState } from 'react';
+import { Form, Formik } from 'formik';
+import React, { useState } from 'react';
 import { RoleEnum, RoleEnumInfos } from 'core/enums/role.enum';
 import { RoleData } from 'core/data/RoleData.data';
 import { BasicChangesData } from 'core/data/basic-changes.data';
-import TreeColumn from 'components/common/Wrapper/ColumnWrapper/ThreeColumn/ThreeColumn';
 import { TwoColumn } from 'components/common/Wrapper/ColumnWrapper/TwoColumn/TwoColumn';
-import { BaseChangesInfo, BaseChangesEnum } from 'core/enums/basic-changes.enum';
+import { BaseChangesEnum } from 'core/enums/basic-changes.enum';
 import { ChangesReasonsData } from 'core/data/changes-reasons.data';
-import { ChangesReasonsEnum } from 'core/enums/changes-reasons.enum';
 import { showToast } from 'core/utils/show-toast';
-import { ToastTypes, UserRoles } from 'core/enums';
+import { ToastTypes } from 'core/enums';
 import { Alert } from 'reactstrap';
 import { FormGroup } from 'reactstrap';
 import { UserSchema } from 'core/validations/Users-validation';
 import BasicSelectOption from 'components/common/Form/SelectOptionComponent/BasicSelectOption/BasicSelectOption';
 import { useGetAllUseTypes, useGetOwnedUserUnionForAdmin } from 'core/services/api/union.api';
-import { useGetAllJobByMultiUseType } from 'core/services/api/jobs.api';
+import { useGetOwnedUserCountyGuildRoomsForAdmin } from 'core/services/api/guild-room.api';
+import BaseChangeManagement from './RequestRegistration/BaseChangeManagement';
+import FileComponent from './RequestRegistration/FileComponent';
 
 interface Props {
-  requesterRole: { label: any | undefined; value: any };
+  requesterRole: RoleEnum;
 }
 const RequestRegistration = ({ requesterRole }: Props) => {
   const changeUserRequest = useSetChangeUserRequestForOthers();
-  console.log(changeUserRequest, 'changeUserRequest');
-
   const getUserByNationalCode = useGetUserByNationalCode();
 
-  const {
-    data: countyData,
-    isLoading: isCountyLoading,
-    isSuccess,
-    refetch: countyRefetch,
-  } = useGetOwnedUserCountyGuildRoomsForAdmin();
-
-  const getCityOrRural = useGetAllCityOrRuralTitles();
-  const {
-    data: countyUnionData,
-    isLoading: isCountyUnionLoading,
-    refetch: countyUnionRefetch,
-    isSuccess: isCountyUnionSuccess,
-  } = useGetOwnedUserUnionForAdmin();
-  const {
-    data: useTypesData,
-    isLoading: isUseTypesLoading,
-    isSuccess: isUseTypesSuccess,
-    refetch: refetchUseTypes,
-  } = useGetAllUseTypes();
-
-  const getAllJobs = useGetAllJobByMultiUseType();
+  const getAllUseTypes = useGetAllUseTypes();
+  const getCountyGuildRoomForAdmin = useGetOwnedUserCountyGuildRoomsForAdmin();
+  const getUnionForAdmin = useGetOwnedUserUnionForAdmin();
 
   const [initialvalues, setinitialvalues] = useState({
     currentNationalCode: '',
     newNationalCode: '',
-    rolesToChange: null,
+    rolesToChange: [],
     baseChanges: [],
     licenseRequest: '',
     useTypes: [],
@@ -89,40 +57,6 @@ const RequestRegistration = ({ requesterRole }: Props) => {
   const [currentUser, setCurrentUser] = useState<any>(null);
   const [newUser, setNewUser] = useState<any>(null);
   const [baseChangesOptions, setBaseChangesOptions] = useState<any>([]);
-  const [countyRoom, setCountyRoom] = useState([]);
-  const [cityOrRural, setCityOrRural] = useState([]);
-  const [countyUnion, setCountyUnion] = useState([]);
-  const [useTypes, setUseTypes] = useState([]);
-  const [jobs, setJobs] = useState([]);
-
-  useEffect(() => {
-    if (countyData && countyData?.data) {
-      const results = countyData.data.result;
-      const counties: any = [];
-      results.map((result: any) => counties.push({ value: result.id, label: result.countyTitle }));
-      setCountyRoom(counties);
-    }
-  }, [countyData, isSuccess]);
-
-  useEffect(() => {
-    const countyUnionsInfo: any = [];
-    if (countyUnionData && countyUnionData?.data) {
-      const unionResults = countyUnionData.data.result;
-      unionResults.unions.map((union: any) =>
-        countyUnionsInfo.push({ value: union.countyId, label: union.unionTitle }),
-      );
-    }
-    setCountyUnion(countyUnionsInfo);
-  }, [countyUnionData, isCountyUnionSuccess]);
-
-  useEffect(() => {
-    const useTypesInfo: any = [];
-    if (useTypesData && useTypesData?.data) {
-      const useTypesResults = useTypesData.data.result;
-      useTypesResults.map((useType: any) => useTypesInfo.push({ value: useType.id, label: useType.title }));
-    }
-    setUseTypes(useTypesInfo);
-  }, [useTypesData, isUseTypesSuccess]);
 
   const handleuserSearch = (nationalCode: string, setuser: any) => {
     setuser(null);
@@ -168,9 +102,11 @@ const RequestRegistration = ({ requesterRole }: Props) => {
 
   const handleSelectedRoleChanges = (roles: any, setFieldValue: any) => {
     setFieldValue('rolesToChange', roles);
+    console.log(roles, 'roles_');
     const filterdBaseChanges = BasicChangesData[0].options.filter(
       (base: any) => base.value !== BaseChangesEnum.UseType,
     );
+
     return roles.map((role: any) =>
       role.level === RoleEnumInfos[RoleEnum.UnionExpert].level
         ? setBaseChangesOptions(BasicChangesData)
@@ -180,56 +116,29 @@ const RequestRegistration = ({ requesterRole }: Props) => {
 
   const handleSelectedbaseChanges = (baseChanges: any, setFieldValue: any) => {
     setFieldValue('baseChanges', baseChanges);
+    console.log(baseChanges, 'baseChanges');
+
     baseChanges.map((baseChange: any) => {
       if (baseChange.value === BaseChangesEnum.UseType) {
-        refetchUseTypes();
+        getAllUseTypes.refetch();
       }
       if (
         baseChange.value === BaseChangesEnum.MainLocationDivision &&
-        requesterRole.label === UserRoles.CountyGuildRoomAdmin
+        requesterRole === RoleEnum.CountyGuildRoomAdmin
       ) {
-        countyRefetch();
+        getCountyGuildRoomForAdmin.refetch();
       } else {
-        countyUnionRefetch();
+        getUnionForAdmin.refetch();
       }
     });
   };
 
-  const handleSelectedCounty = (county: any, setFieldValue: any) => {
-    setFieldValue('county', county);
-    if (county.value) {
-      getCityOrRural.mutate([county.value], {
-        onSuccess: (data: any) => {
-          const result = data?.data.result;
-          if (result) {
-            const cityOrRural: any = [];
-            result.map((item: any) => cityOrRural.push({ value: item.id, label: item.title }));
-            setCityOrRural(cityOrRural);
-          }
-        },
-        onError: (error: any) => {
-          console.error('Error:', error);
-        },
-      });
+  const isSameLevel = (roles: any) => {
+    if (!roles || roles.length === 0) {
+      return true;
     }
-  };
-
-  const handleSelectedUseTypes = (useTypes: any, setFieldValue: any) => {
-    setFieldValue('useTypes', useTypes);
-    if (useTypes.length > 0) {
-      const selectedUseTypeIds: any = [];
-      useTypes.map((useType: any) => selectedUseTypeIds.push(useType.value));
-      getAllJobs.mutate(selectedUseTypeIds, {
-        onSuccess: (data: any) => {
-          const jobsInfo: any = [];
-          if (data && data.data) {
-            const jobsResult = data.data.result;
-            jobsResult.map((job: any) => jobsInfo.push({ value: job.id, label: job.title }));
-          }
-          setJobs(jobsInfo);
-        },
-      });
-    }
+    const levels = roles.map((role: any) => role.level);
+    return levels.every((level: any) => level === levels[0]);
   };
 
   const resetToDefault = ({ resetForm }: any) => {
@@ -237,59 +146,56 @@ const RequestRegistration = ({ requesterRole }: Props) => {
     setCurrentUser(null);
     setNewUser(null);
   };
-  
-  const handleSubmit = (values: any, { resetForm }: any) => {
-    console.log(values, 'values');
 
-    const formData: any = new FormData();
+  const handleSubmit = (values: any, { resetForm }: any) => {
     if (!values.file || !(values.file.length > 0)) {
       showToast(['لطفا فایل را انتخاب کنید!'], ToastTypes.error);
       return;
     }
+    const formData: any = new FormData();
 
     if (values.file) {
       for (let file of values.file) {
         formData.append(`File`, file);
       }
     }
+    const obj: any = {
+      BaseChangesTypes: values.baseChanges.map((change: any) => change.value),
+      RolesToChange: values.rolesToChange.map((role: any) => role.value),
+      RequesterRole: requesterRole,
+      CurrentUserInfoId: currentUser.id,
+      IsSelectAllUseType: false,
+      IsSelectAllJob: false,
+      ChangesReasonsEnum: values.changesReasons ? values.changesReasons.value : null,
+      Description: values.description,
+      FileLicenseNumber: values.fileLicenseNumber,
+      FileLicenseDate: values.fileLicenseDate,
+      FileDescription: values.fileDescription,
+    };
 
-    formData.append(
-      'BaseChangesTypes',
-      values.baseChanges.map((change: any) => change.value),
-    );
-    formData.append(
-      'RolesToChange',
-      values.rolesToChange.map((role: any) => role.value),
-    );
-    formData.append('RequesterRole', requesterRole.value);
-    formData.append('CurrentUserInfoId', currentUser.id);
+    Object.keys(obj).map(function (key, index) {
+      formData.append(key, obj[key]);
+    });
+
     values.province && formData.append('ProvinceId', values.province);
     values.county && formData.append('CountyId', values.county.value);
-
     values.cityOrVillage && formData.append('CityOrVillageId', values.cityOrVillage.value);
     values.countyUnion && formData.append('CountyUnionId', values.countyUnion.value);
-    formData.append('IsSelectAllUseType', false);
-    formData.append('IsSelectAllJob', false);
     values.useTypes.length > 0 &&
       values.useTypes.forEach((type: any, index: any) => formData.append(`UseTypeIds[${index}]`, type.value));
     values.jobs.length > 0 &&
       values.jobs.forEach((job: any, index: any) => formData.append(`JobIds[${index}]`, job.value));
     values.licenseRequest && formData.append('LicenseRequestId', parseInt(values.licenseRequest));
-    formData.append('ChangesReasonsEnum', values.changesReasons ? values.changesReasons.value : null);
-    formData.append('Description', values.description);
-    formData.append('FileLicenseNumber', values.fileLicenseNumber);
-    formData.append('FileLicenseDate', values.fileLicenseDate);
-    formData.append('FileDescription', values.fileDescription);
 
     changeUserRequest.mutate(formData, {
       onSuccess: (data) => {
         showToast(['اطلاعات با موفقیت ثبت شد'], ToastTypes.success);
-        resetToDefault({resetForm});
+        resetToDefault({ resetForm });
       },
 
       onError: (error: any) => {
         showToast(['در ثبت اطلاعات مشکلی به وجود آمده است'], ToastTypes.error);
-        resetToDefault({resetForm});
+        resetToDefault({ resetForm });
       },
     });
   };
@@ -298,7 +204,7 @@ const RequestRegistration = ({ requesterRole }: Props) => {
     <FormDivider textHeader="">
       <Formik
         initialValues={initialvalues}
-        validationSchema={() => UserSchema(requesterRole.label)}
+        validationSchema={() => UserSchema(requesterRole)}
         onSubmit={handleSubmit}
         enableReinitialize={true}
       >
@@ -334,109 +240,49 @@ const RequestRegistration = ({ requesterRole }: Props) => {
             </TwoColumn>
             <div style={{ marginTop: '1rem' }}>
               <TwoColumn>
-                <MultiSelectOption
-                  options={RoleData}
-                  name="rolesToChange"
-                  hasLabel
-                  labelText="نقش"
-                  placeHolder="لطفا نقش را وارد نمایید"
-                  significant
-                  onChange={(roles: any) => {
-                    handleSelectedRoleChanges(roles, setFieldValue);
-                  }}
-                />
-                <MultiSelectOption
-                  options={baseChangesOptions}
-                  name="baseChanges"
-                  hasLabel
-                  labelText="مبنای تغییرات"
-                  placeHolder="یک گزینه را انتخاب نمایید"
-                  significant
-                  onChange={(baseChanges) => {
-                    handleSelectedbaseChanges(baseChanges, setFieldValue);
-                  }}
-                />
+                <div>
+                  <MultiSelectOption
+                    options={RoleData}
+                    name="rolesToChange"
+                    hasLabel
+                    labelText="نقش"
+                    placeHolder="لطفا نقش را وارد نمایید"
+                    significant
+                    onChange={(roles: any) => {
+                      handleSelectedRoleChanges(roles, setFieldValue);
+                    }}
+                  />
+                  {!isSameLevel(values.rolesToChange) && (
+                    <p className="text-danger fs-6">تنها نقش های هم سطح را می توانید انتخاب کنید</p>
+                  )}
+                </div>
+                <div>
+                  <MultiSelectOption
+                    options={baseChangesOptions}
+                    name="baseChanges"
+                    hasLabel
+                    labelText="مبنای تغییرات"
+                    placeHolder="یک گزینه را انتخاب نمایید"
+                    significant
+                    onChange={(baseChanges) => {
+                      handleSelectedbaseChanges(baseChanges, setFieldValue);
+                    }}
+                  />
+                  {!isSameLevel(values.baseChanges) && (
+                    <p className="text-danger fs-6">تنها مبناهای هم سطح را می توانید انتخاب کنید</p>
+                  )}
+                </div>
               </TwoColumn>
             </div>
-
-            {values.baseChanges &&
-              values.baseChanges.length > 0 &&
-              values.baseChanges.map((baseChange: any) =>
-                baseChange.value === BaseChangesEnum.LicenseRequest ? (
-                  <TwoColumn>
-                    <TextInput
-                      name="licenseRequest"
-                      value={values.licenseRequest}
-                      placeholder="شناسه درخواست"
-                      lableText="شناسه درخواست"
-                      significant
-                    />
-                  </TwoColumn>
-                ) : (
-                  (baseChange.value === BaseChangesEnum.MainLocationDivision && (
-                    <>
-                      {requesterRole.label === UserRoles.CountyGuildRoomAdmin ? (
-                        <TwoColumn>
-                          <BasicSelectOption
-                            name="county"
-                            data={countyRoom}
-                            placeHolder="یک گزینه انتخاب نمایید"
-                            lableText="شهرستان"
-                            onChange={(county) => {
-                              handleSelectedCounty(county, setFieldValue);
-                            }}
-                            isLoading={isCountyLoading}
-                          />
-                          <BasicSelectOption
-                            name="cityOrVillage"
-                            data={cityOrRural}
-                            placeHolder="یک گزینه انتخاب نمایید"
-                            lableText="شهر/روستا"
-                            isLoading={getCityOrRural.isLoading}
-                          />
-                        </TwoColumn>
-                      ) : requesterRole.label === UserRoles.UnionAdmin ? (
-                        <TwoColumn>
-                          <BasicSelectOption
-                            name="countyUnion"
-                            data={countyUnion}
-                            placeHolder="یک گزینه انتخاب نمایید"
-                            lableText="اتحادیه"
-                            isLoading={isCountyUnionLoading}
-                          />
-                        </TwoColumn>
-                      ) : null}
-                    </>
-                  )) ||
-                  (baseChange.value === BaseChangesEnum.UseType && (
-                    <>
-                      <TwoColumn>
-                        <MultiSelectOption
-                          name="useTypes"
-                          options={useTypes}
-                          placeHolder="یک گزینه انتخاب نمایید"
-                          significant
-                          hasLabel
-                          labelText="نوع کاربری"
-                          onChange={(useTypes: any) => {
-                            handleSelectedUseTypes(useTypes, setFieldValue);
-                          }}
-                          isLoading={isUseTypesLoading}
-                        />
-                        <MultiSelectOption
-                          name="jobs"
-                          options={jobs}
-                          placeHolder="یک گزینه انتخاب نمایید"
-                          hasLabel
-                          labelText="شغل"
-                          significant
-                          isLoading={getAllJobs.isLoading}
-                        />
-                      </TwoColumn>
-                    </>
-                  ))
-                ),
-              )}
+            {values.baseChanges && values.baseChanges.length > 0 && (
+              <BaseChangeManagement
+                values={values}
+                setFieldValue={setFieldValue}
+                UseTypeMutation={getAllUseTypes}
+                countyMutation={getCountyGuildRoomForAdmin}
+                unionMutation={getUnionForAdmin}
+              />
+            )}
 
             <>
               <BasicSelectOption
@@ -446,32 +292,7 @@ const RequestRegistration = ({ requesterRole }: Props) => {
                 placeHolder="یک گزینه را انتخاب نمایید"
                 significant
               />
-              <TwoColumn>
-                <TextInput
-                  name="fileLicenseNumber"
-                  value={values.fileLicenseNumber}
-                  placeholder="شماره مجوز فایل"
-                  lableText="شماره مجوز فایل"
-                  significant
-                />
-
-                <ModernDatePicker
-                  name="fileLicenseDate"
-                  lableText="تاریخ مجوز فایل"
-                  placeholder="تاریخ مجوز فایل"
-                  hasMaximum={false}
-                  initialValue={values.fileLicenseDate}
-                />
-              </TwoColumn>
-              <DropZone lableText="انتخاب فایل" name="file" significant isSingle />
-              <TextInput
-                name="fileDescription"
-                value={values.fileDescription}
-                placeholder="توضیحات فایل"
-                lableText="توضیحات فایل"
-                significant
-              />
-
+              <FileComponent values={values} />
               <TextArea
                 lableText="توضیحات"
                 name="description"
