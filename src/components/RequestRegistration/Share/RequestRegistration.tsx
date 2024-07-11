@@ -100,9 +100,18 @@ const RequestRegistration = ({ requesterRole }: Props) => {
     );
   };
 
-  const handleSelectedRoleChanges = (roles: any, setFieldValue: any) => {
+  const handleSelectedRoleChanges = (roles: any, setFieldValue: any, baseChanges: any) => {
     setFieldValue('rolesToChange', roles);
-    console.log(roles, 'roles_');
+    setFieldValue(
+      'baseChanges',
+      baseChanges.filter((baseChange: any) =>
+        roles.some(
+          (role: any) =>
+            role.level === RoleEnumInfos[RoleEnum.UnionExpert].level && baseChange.value === BaseChangesEnum.UseType,
+        ),
+      ),
+    );
+
     const filterdBaseChanges = BasicChangesData[0].options.filter(
       (base: any) => base.value !== BaseChangesEnum.UseType,
     );
@@ -116,7 +125,6 @@ const RequestRegistration = ({ requesterRole }: Props) => {
 
   const handleSelectedbaseChanges = (baseChanges: any, setFieldValue: any) => {
     setFieldValue('baseChanges', baseChanges);
-    console.log(baseChanges, 'baseChanges');
 
     baseChanges.map((baseChange: any) => {
       if (baseChange.value === BaseChangesEnum.UseType) {
@@ -249,11 +257,13 @@ const RequestRegistration = ({ requesterRole }: Props) => {
                     placeHolder="لطفا نقش را وارد نمایید"
                     significant
                     onChange={(roles: any) => {
-                      handleSelectedRoleChanges(roles, setFieldValue);
+                      handleSelectedRoleChanges(roles, setFieldValue, values.baseChanges);
                     }}
                   />
                   {!isSameLevel(values.rolesToChange) && (
-                    <p className="text-danger fs-6">تنها نقش های هم سطح را می توانید انتخاب کنید</p>
+                    <p className="text-danger" style={{ fontSize: '12px' }}>
+                      تنها نقش های هم سطح را می توانید انتخاب کنید
+                    </p>
                   )}
                 </div>
                 <div>
@@ -269,7 +279,9 @@ const RequestRegistration = ({ requesterRole }: Props) => {
                     }}
                   />
                   {!isSameLevel(values.baseChanges) && (
-                    <p className="text-danger fs-6">تنها مبناهای هم سطح را می توانید انتخاب کنید</p>
+                    <p className="text-danger" style={{ fontSize: '12px' }}>
+                      تنها مبناهای هم سطح را می توانید انتخاب کنید
+                    </p>
                   )}
                 </div>
               </TwoColumn>

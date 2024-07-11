@@ -1,6 +1,6 @@
 import React from 'react';
 import RequestRegistration from 'components/RequestRegistration/Share/RequestRegistration';
-import { RoleEnum, RoleEnumInfos } from 'core/enums/role.enum';
+import { RoleEnum } from 'core/enums/role.enum';
 
 const UnionAdminRequest = () => {
   return (

@@ -5,11 +5,7 @@ export const useGetFieldData = (getMutation: any, valueKey: any, titleKey: any, 
   useEffect(() => {
     if (getMutation?.data && getMutation?.data.data) {
       const newArray: any = [];
-      console.log(dataKey ? 'true' : 'false', 'dataKeyyy');
-
       const results = dataKey ? getMutation.data.data.result[dataKey] : getMutation.data.data.result;
-      console.log(results, 'resultss_');
-
       if (results) {
         results.map((result: any) => newArray.push({ value: result[valueKey], label: result[titleKey] }));
       }

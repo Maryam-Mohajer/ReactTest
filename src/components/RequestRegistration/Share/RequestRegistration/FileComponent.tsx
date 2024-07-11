@@ -1,6 +1,7 @@
+import React from 'react';
 import { DropZone, ModernDatePicker, TextInput } from 'components/common/Form';
 import { TwoColumn } from 'components/common/Wrapper/ColumnWrapper/TwoColumn/TwoColumn';
-import React from 'react';
+
 interface Props {
   values: any;
 }

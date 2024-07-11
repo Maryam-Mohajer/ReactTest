@@ -19,13 +19,7 @@ const Actions: React.FC<IPropTypes> = ({
 }) => {
   return (
     <>
-      <Button
-        size="sm"
-        color={'warning'}
-        onClick={() => {
-          console.log(original, 'edied item');
-        }}
-      >
+      <Button size="sm" color={'warning'} onClick={() => {}}>
         ویرایش
       </Button>
       <Button size="sm" color="danger" style={{ marginRight: '0.75rem' }} onClick={() => {}}>

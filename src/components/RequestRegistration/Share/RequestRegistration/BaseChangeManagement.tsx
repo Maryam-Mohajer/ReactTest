@@ -12,9 +12,9 @@ import { CanRenderByPath } from 'components/common/Wrapper/CanRenderByPath/CanRe
 interface Props {
   values: any;
   setFieldValue: any;
-  UseTypeMutation?: any;
-  countyMutation?: any;
-  unionMutation?: any;
+  UseTypeMutation: any;
+  countyMutation: any;
+  unionMutation: any;
 }
 const BaseChangeManagement = ({ values, setFieldValue, UseTypeMutation, countyMutation, unionMutation }: Props) => {
   const CountyAdminUrls = ['/Registration/CountyAdmin'];
@@ -26,13 +26,13 @@ const BaseChangeManagement = ({ values, setFieldValue, UseTypeMutation, countyMu
   const [cityOrRural, setCityOrRural] = useState([]);
   const [jobs, setJobs] = useState([]);
 
-  const countyRoom = useGetFieldData(countyMutation, 'id', 'countyTitle');
-  const useTypes = useGetFieldData(UseTypeMutation, 'id', 'title');
-  const countyUnion = useGetFieldData(unionMutation, 'unionId', 'unionTitle', 'unions');
-
+  const countyRoomData = useGetFieldData(countyMutation, 'id', 'countyTitle');
+  const useTypesData = useGetFieldData(UseTypeMutation, 'id', 'title');
+  const countyUnionData = useGetFieldData(unionMutation, 'unionId', 'unionTitle', 'unions');
 
   const handleSelectedCounty = (county: any, setFieldValue: any) => {
     setFieldValue('county', county);
+
     if (county.value) {
       getCityOrRural.mutate([county.value], {
         onSuccess: (data: any) => {
@@ -50,11 +50,19 @@ const BaseChangeManagement = ({ values, setFieldValue, UseTypeMutation, countyMu
     }
   };
 
-  const handleSelectedUseTypes = (useTypes: any, setFieldValue: any) => {
+  const handleSelectedUseTypes = (useTypes: any, setFieldValue: any, selectedJobs: any) => {
     setFieldValue('useTypes', useTypes);
+
     if (useTypes.length > 0) {
       const selectedUseTypeIds: any = [];
       useTypes.map((useType: any) => selectedUseTypeIds.push(useType.value));
+
+      setFieldValue(
+        'jobs',
+        selectedJobs.filter((job: any) =>
+          useTypes.some((useType: any) => useType.value === useTypes.forEach((type: any) => type.value)),
+        ),
+      );
       getAllJobs.mutate(selectedUseTypeIds, {
         onSuccess: (data: any) => {
           const jobsInfo: any = [];
@@ -88,7 +96,7 @@ const BaseChangeManagement = ({ values, setFieldValue, UseTypeMutation, countyMu
                 <TwoColumn>
                   <BasicSelectOption
                     name="county"
-                    data={countyRoom}
+                    data={countyRoomData}
                     placeHolder="یک گزینه انتخاب نمایید"
                     lableText="شهرستان"
                     onChange={(county) => {
@@ -109,7 +117,7 @@ const BaseChangeManagement = ({ values, setFieldValue, UseTypeMutation, countyMu
                 <TwoColumn>
                   <BasicSelectOption
                     name="countyUnion"
-                    data={countyUnion}
+                    data={countyUnionData}
                     placeHolder="یک گزینه انتخاب نمایید"
                     lableText="اتحادیه"
                     isLoading={unionMutation?.isLoading}
@@ -123,19 +131,22 @@ const BaseChangeManagement = ({ values, setFieldValue, UseTypeMutation, countyMu
               <TwoColumn>
                 <MultiSelectOption
                   name="useTypes"
-                  options={useTypes}
+                  options={useTypesData}
                   placeHolder="یک گزینه انتخاب نمایید"
                   significant
                   hasLabel
                   labelText="نوع کاربری"
                   onChange={(useTypes: any) => {
-                    handleSelectedUseTypes(useTypes, setFieldValue);
+                    handleSelectedUseTypes(useTypes, setFieldValue, values.jobs);
                   }}
                   isLoading={UseTypeMutation?.isLoading}
                 />
                 <MultiSelectOption
                   name="jobs"
                   options={jobs}
+                  onChange={(jobs: any) => {
+                    setFieldValue('jobs', jobs);
+                  }}
                   placeHolder="یک گزینه انتخاب نمایید"
                   hasLabel
                   labelText="شغل"

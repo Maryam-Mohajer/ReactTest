@@ -21,7 +21,6 @@ const CountyList = ({ requesterRole }: Props) => {
       requesterRole: requesterRole,
     });
   }, []);
-  console.log(tableData, 'tableData');
 
   useEffect(() => {
     const newRequestResults: any = [];
