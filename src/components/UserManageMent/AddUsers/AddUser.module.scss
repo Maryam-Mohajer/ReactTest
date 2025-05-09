@@ -1,0 +1,22 @@
+.btn-close {
+  display: flex;
+  flex-direction: row;
+  justify-content: flex-end;
+}
+.btn-add {
+  margin: 1rem;
+}
+.container {
+  margin: -1rem 0.5rem 0.7rem 0.5rem;
+}
+.internalContainer {
+  padding: 1.2rem;
+}
+.formBtn:hover {
+  color: white;
+  background-color: #b7bdbadc;
+}
+.selectStyle {
+  font-size: 12px;
+  font-weight: 100;
+}

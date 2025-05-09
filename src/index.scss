@@ -1,6 +1,6 @@
-@import "../node_modules/prismjs/themes/prism-tomorrow";
-@import "./assets/scss/app.scss";
-@import "./timeline.scss";
+@import '../node_modules/prismjs/themes/prism-tomorrow';
+@import './assets/scss/app.scss';
+@import './timeline.scss';
 
 :root {
   --blueDark: #082454;
@@ -23,6 +23,7 @@ body {
   // background-color: white !important;
   width: 100vw;
   overflow-x: hidden;
+  padding: 1.5rem 3.8rem 1.5rem 2.6rem;
 }
 * {
   font-family: ir-sans-r, ir-sans-m !important;
